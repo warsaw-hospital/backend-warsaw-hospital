@@ -1,0 +1,18 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: warsaw-hospital-backend
+    restart: always
+    hostname: warsaw-hospital-backend
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: warsaw-hospital-backend
+    volumes:
+      - .db:/var/lib/postgresql/
+    ports:
+      - "5435:5432"
