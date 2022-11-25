@@ -17,19 +17,14 @@ public class AuthMapper {
     }
 
     List<UserRoleEntity> roles =
-        user.getRoles().stream()
-            .map(UserToUserRoleEntity::getUserRole)
-            .collect(Collectors.toList());
+        user.getRoles().stream().map(UserToUserRoleEntity::getUserRole).toList();
     return response
         .setLoggedIn(true)
         .setName(user.getName())
         .setLastname(user.getSurname())
         .setRoles(roles.stream().map(UserRoleMapper::toResponse).collect(Collectors.toList()))
-        .setPersonalCode(user.getPersonalCode())
         .setEmail(user.getEmail())
-        .setFullyCreated(user.getFullyCreated())
         .setPhoneNumber(user.getPhoneNumber())
-        .setAddress(user.getAddress())
-        .setType(user.getUserType());
+        .setAddress(user.getAddress());
   }
 }

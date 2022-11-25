@@ -17,16 +17,11 @@ public class AuthenticatedProfile implements Authentication {
   private boolean authenticated;
   private List<String> authorityList = new ArrayList<>();
 
-  public AuthenticatedProfile() {
-
-  }
+  public AuthenticatedProfile() {}
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorityList
-            .stream()
-            .map((SimpleGrantedAuthority::new))
-            .collect(Collectors.toList());
+    return authorityList.stream().map((SimpleGrantedAuthority::new)).collect(Collectors.toList());
   }
 
   @Override
