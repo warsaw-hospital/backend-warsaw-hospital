@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Locale;
 import java.util.Objects;
 
-public class EmailPasswordLoginRequest {
+public class LoginRequest {
   @Email @NotEmpty private String email;
   @NotEmpty private String password;
   private String ipAddress;
@@ -14,7 +14,7 @@ public class EmailPasswordLoginRequest {
     return email;
   }
 
-  public EmailPasswordLoginRequest setEmail(String email) {
+  public LoginRequest setEmail(String email) {
     this.email = email.toLowerCase(Locale.ROOT);
     return this;
   }
@@ -23,7 +23,7 @@ public class EmailPasswordLoginRequest {
     return password;
   }
 
-  public EmailPasswordLoginRequest setPassword(String password) {
+  public LoginRequest setPassword(String password) {
     this.password = password;
     return this;
   }
@@ -32,7 +32,7 @@ public class EmailPasswordLoginRequest {
     return ipAddress;
   }
 
-  public EmailPasswordLoginRequest setIpAddress(String ipAddress) {
+  public LoginRequest setIpAddress(String ipAddress) {
     this.ipAddress = ipAddress;
     return this;
   }
@@ -40,8 +40,8 @@ public class EmailPasswordLoginRequest {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof EmailPasswordLoginRequest)) return false;
-    EmailPasswordLoginRequest that = (EmailPasswordLoginRequest) o;
+    if (!(o instanceof LoginRequest)) return false;
+    LoginRequest that = (LoginRequest) o;
     return getEmail().equals(that.getEmail())
         && getPassword().equals(that.getPassword())
         && getIpAddress().equals(that.getIpAddress());

@@ -15,7 +15,7 @@ public class UserEntity {
   private Long id;
 
   private String name;
-  private String surname;
+  private String lastname;
 
   @Column(unique = true)
   private String email;
@@ -24,6 +24,7 @@ public class UserEntity {
 
   @Column(unique = true)
   private String personalCode;
+  private Long representedDoctorId;
 
   private String phoneNumber;
   private String address;
@@ -73,12 +74,12 @@ public class UserEntity {
     return this;
   }
 
-  public String getSurname() {
-    return surname;
+  public String getLastname() {
+    return lastname;
   }
 
-  public UserEntity setSurname(String surname) {
-    this.surname = surname;
+  public UserEntity setLastname(String surname) {
+    this.lastname = surname;
     return this;
   }
 
@@ -217,7 +218,7 @@ public class UserEntity {
     UserEntity that = (UserEntity) o;
     return getId().equals(that.getId())
         && getName().equals(that.getName())
-        && getSurname().equals(that.getSurname())
+        && getLastname().equals(that.getLastname())
         && getEmail().equals(that.getEmail())
         && getPassword().equals(that.getPassword())
         && getPersonalCode().equals(that.getPersonalCode())
@@ -236,7 +237,7 @@ public class UserEntity {
     return Objects.hash(
         getId(),
         getName(),
-        getSurname(),
+        getLastname(),
         getEmail(),
         getFullyCreated(),
         getPassword(),

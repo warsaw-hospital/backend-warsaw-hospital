@@ -21,7 +21,7 @@ public class AuthMapper {
     return response
         .setLoggedIn(true)
         .setName(user.getName())
-        .setLastname(user.getSurname())
+        .setLastname(user.getLastname())
         .setRoles(roles.stream().map(UserRoleMapper::toResponse).collect(Collectors.toList()))
         .setEmail(user.getEmail())
         .setPhoneNumber(user.getPhoneNumber())

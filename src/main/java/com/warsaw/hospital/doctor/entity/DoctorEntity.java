@@ -1,9 +1,8 @@
 package com.warsaw.hospital.doctor.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.warsaw.hospital.user.entity.UserEntity;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "doctor")
@@ -16,9 +15,14 @@ public class DoctorEntity {
   private String lastname;
   private String email;
   private String password;
+  private String personalCode;
   private String specialization;
-  private String phone_number;
-  private String address;
+  private String phoneNumber;
+  private String description;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
 
   public Long getId() {
     return id;
@@ -65,6 +69,15 @@ public class DoctorEntity {
     return this;
   }
 
+  public String getPersonalCode() {
+    return personalCode;
+  }
+
+  public DoctorEntity setPersonalCode(String personalCode) {
+    this.personalCode = personalCode;
+    return this;
+  }
+
   public String getSpecialization() {
     return specialization;
   }
@@ -74,21 +87,30 @@ public class DoctorEntity {
     return this;
   }
 
-  public String getPhone_number() {
-    return phone_number;
+  public String getPhoneNumber() {
+    return phoneNumber;
   }
 
-  public DoctorEntity setPhone_number(String phone_number) {
-    this.phone_number = phone_number;
+  public DoctorEntity setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
     return this;
   }
 
-  public String getAddress() {
-    return address;
+  public String getDescription() {
+    return description;
   }
 
-  public DoctorEntity setAddress(String address) {
-    this.address = address;
+  public DoctorEntity setDescription(String address) {
+    this.description = address;
+    return this;
+  }
+
+  public UserEntity getUser() {
+    return user;
+  }
+
+  public DoctorEntity setUser(UserEntity user) {
+    this.user = user;
     return this;
   }
 
@@ -103,8 +125,9 @@ public class DoctorEntity {
         && getEmail().equals(that.getEmail())
         && getPassword().equals(that.getPassword())
         && getSpecialization().equals(that.getSpecialization())
-        && getPhone_number().equals(that.getPhone_number())
-        && getAddress().equals(that.getAddress());
+        && getPersonalCode().equals(that.getPersonalCode())
+        && getPhoneNumber().equals(that.getPhoneNumber())
+        && getDescription().equals(that.getDescription());
   }
 
   @Override
@@ -115,8 +138,9 @@ public class DoctorEntity {
         getLastname(),
         getEmail(),
         getPassword(),
+        getPersonalCode(),
         getSpecialization(),
-        getPhone_number(),
-        getAddress());
+        getPhoneNumber(),
+        getDescription());
   }
 }
