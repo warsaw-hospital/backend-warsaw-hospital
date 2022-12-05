@@ -15,10 +15,12 @@ target/
 
 ### IntelliJ IDEA ###
 .idea/
+.idea
 *.iws
 *.iml
 *.ipr
 .db/
+.DS_Store
 
 ### NetBeans ###
 /nbproject/private/
