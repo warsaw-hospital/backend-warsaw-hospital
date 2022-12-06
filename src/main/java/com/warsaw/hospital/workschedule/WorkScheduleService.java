@@ -34,6 +34,15 @@ public class WorkScheduleService {
     return workScheduleTemplateRepository.findAllByDoctorId(doctorId);
   }
 
+  public WorkScheduleTemplateEntity findWorkScheduleTemplateById(Long id) {
+    return workScheduleTemplateRepository
+        .findById(id)
+        .orElseThrow(
+            () ->
+                ApiException.notFound(ERROR_WORK_SCHEDULE_TEMPLATE_MESSAGE_BASE + "notFound")
+                    .addLabel("id", id));
+  }
+
   public WorkScheduleTemplateEntity create(WorkScheduleTemplateEntity entity) {
     if (workScheduleTemplateRepository.existsByDoctorIdAndDayOfWeek(
         entity.getDoctor().getId(), entity.getDayOfWeek())) {
@@ -97,6 +106,14 @@ public class WorkScheduleService {
 
   public List<WorkDayEntity> findAllWorkDaysByDoctorId(Long doctorId) {
     return workDayRepository.findAllByDoctorId(doctorId);
+  }
+
+  public WorkDayEntity findWorkDayById(Long id) {
+    return workDayRepository
+        .findById(id)
+        .orElseThrow(
+            () ->
+                ApiException.notFound(ERROR_WORK_DAY_MESSAGE_BASE + "notFound").addLabel("id", id));
   }
 
   public WorkDayEntity create(WorkDayEntity entity) {

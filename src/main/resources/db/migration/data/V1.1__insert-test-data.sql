@@ -34,7 +34,7 @@ VALUES (1, 'Dr. Doctor', 'Psychikos nestabilumu kurejas',
 INSERT INTO user_to_doctor(id, user_id, doctor_id)
 VALUES (1, 1, 1);
 
-INSERT INTO specialization(id, name, description)
+INSERT INTO doctor_specialization(id, name, description)
 VALUES (1, 'CARDIOLOGIST', 'Cardiologist description'),
        (2, 'DENTIST', 'Dentist description'),
        (3, 'DERMATOLOGIST', 'Dermatologist description'),
@@ -58,10 +58,10 @@ VALUES (1, 1, 12);
 
 
 INSERT INTO work_schedule_template(id, day_of_week, start_hour, end_hour, is_day_off, doctor_id)
-VALUES (1, 1, 9, 17, false, 1),
-       (2, 2, 9, 17, false, 1),
-       (3, 3, 9, 17, false, 1),
-       (4, 4, 9, 17, false, 1),
-       (5, 5, 9, 17, false, 1),
-       (6, 6, 9, 17, true, 1),
-       (7, 7, 9, 17, true, 1);
+VALUES (1, 1, '9:00', '17:00', false, 1),
+       (2, 2, '9:00', '17:00', false, 1),
+       (3, 3, '9:00', '17:00', false, 1),
+       (4, 4, '9:00', '17:00', false, 1),
+       (5, 5, '9:00', '17:00', false, 1),
+       (6, 6, '9:00', '17:00', true, 1),
+       (7, 7, '9:00', '17:00', true, 1);
