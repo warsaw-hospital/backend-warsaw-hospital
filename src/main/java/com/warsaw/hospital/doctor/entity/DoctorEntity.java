@@ -1,6 +1,7 @@
 package com.warsaw.hospital.doctor.entity;
 
 import com.warsaw.hospital.user.entity.UserToDoctorEntity;
+import com.warsaw.hospital.workschedule.entity.WorkDayEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public class DoctorEntity {
 
   @OneToOne(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
   private UserToDoctorEntity user;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor", orphanRemoval = true)
+  private List<WorkDayEntity> workDays = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -133,6 +137,15 @@ public class DoctorEntity {
 
   public DoctorEntity setUser(UserToDoctorEntity user) {
     this.user = user;
+    return this;
+  }
+
+  public List<WorkDayEntity> getWorkDays() {
+    return workDays;
+  }
+
+  public DoctorEntity setWorkDays(List<WorkDayEntity> workDays) {
+    this.workDays = workDays;
     return this;
   }
 
