@@ -1,33 +1,22 @@
-package com.warsaw.hospital.workschedule.entity;
+package com.warsaw.hospital.workschedule.web.request;
 
-import com.warsaw.hospital.doctor.entity.DoctorEntity;
-
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Entity(name = "work_day")
-public class WorkDayEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class WorkDayUpdateRequest {
   private Long id;
-
   private LocalDate workDate;
   private LocalTime startHour;
   private LocalTime endHour;
   private Boolean isHoliday;
   private Boolean isDayOff;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-  private DoctorEntity doctor;
-
   public Long getId() {
     return id;
   }
 
-  public WorkDayEntity setId(Long id) {
+  public WorkDayUpdateRequest setId(Long id) {
     this.id = id;
     return this;
   }
@@ -36,7 +25,7 @@ public class WorkDayEntity {
     return workDate;
   }
 
-  public WorkDayEntity setWorkDate(LocalDate workDate) {
+  public WorkDayUpdateRequest setWorkDate(LocalDate workDate) {
     this.workDate = workDate;
     return this;
   }
@@ -45,7 +34,7 @@ public class WorkDayEntity {
     return startHour;
   }
 
-  public WorkDayEntity setStartHour(LocalTime startHour) {
+  public WorkDayUpdateRequest setStartHour(LocalTime startHour) {
     this.startHour = startHour;
     return this;
   }
@@ -54,7 +43,7 @@ public class WorkDayEntity {
     return endHour;
   }
 
-  public WorkDayEntity setEndHour(LocalTime endHour) {
+  public WorkDayUpdateRequest setEndHour(LocalTime endHour) {
     this.endHour = endHour;
     return this;
   }
@@ -63,7 +52,7 @@ public class WorkDayEntity {
     return isHoliday;
   }
 
-  public WorkDayEntity setIsHoliday(Boolean holiday) {
+  public WorkDayUpdateRequest setIsHoliday(Boolean holiday) {
     isHoliday = holiday;
     return this;
   }
@@ -72,17 +61,8 @@ public class WorkDayEntity {
     return isDayOff;
   }
 
-  public WorkDayEntity setIsDayOff(Boolean dayOff) {
+  public WorkDayUpdateRequest setIsDayOff(Boolean dayOff) {
     isDayOff = dayOff;
-    return this;
-  }
-
-  public DoctorEntity getDoctor() {
-    return doctor;
-  }
-
-  public WorkDayEntity setDoctor(DoctorEntity doctor) {
-    this.doctor = doctor;
     return this;
   }
 
@@ -90,19 +70,17 @@ public class WorkDayEntity {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    WorkDayEntity that = (WorkDayEntity) o;
+    WorkDayUpdateRequest that = (WorkDayUpdateRequest) o;
     return getId().equals(that.getId())
         && getWorkDate().equals(that.getWorkDate())
         && getStartHour().equals(that.getStartHour())
         && getEndHour().equals(that.getEndHour())
         && isHoliday.equals(that.isHoliday)
-        && isDayOff.equals(that.isDayOff)
-        && getDoctor().equals(that.getDoctor());
+        && isDayOff.equals(that.isDayOff);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        getId(), getWorkDate(), getStartHour(), getEndHour(), isHoliday, isDayOff, getDoctor());
+    return Objects.hash(getId(), getWorkDate(), getStartHour(), getEndHour(), isHoliday, isDayOff);
   }
 }
