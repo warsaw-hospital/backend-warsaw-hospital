@@ -1,9 +1,8 @@
 package com.warsaw.hospital.doctor.web.request;
 
-import com.warsaw.hospital.doctor.enums.DoctorSpecializationEnum;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Objects;
 
 public class DoctorCreateRequest {
@@ -12,10 +11,10 @@ public class DoctorCreateRequest {
   @NotEmpty @Email private String email;
   @NotEmpty private String password;
   @NotEmpty private String personalCode;
-  @NotEmpty private DoctorSpecializationEnum specialization;
   @NotEmpty private String phoneNumber;
   @NotEmpty private String description;
   @NotEmpty private String address;
+  @NotEmpty private List<Long> specializationIds;
 
   public String getName() {
     return name;
@@ -62,12 +61,12 @@ public class DoctorCreateRequest {
     return this;
   }
 
-  public DoctorSpecializationEnum getSpecialization() {
-    return specialization;
+  public List<Long> getSpecializationIds() {
+    return specializationIds;
   }
 
-  public DoctorCreateRequest setSpecialization(DoctorSpecializationEnum specialization) {
-    this.specialization = specialization;
+  public DoctorCreateRequest setSpecializations(List<Long> specializationIds) {
+    this.specializationIds = specializationIds;
     return this;
   }
 
@@ -108,7 +107,7 @@ public class DoctorCreateRequest {
         && getEmail().equals(that.getEmail())
         && getPassword().equals(that.getPassword())
         && getPersonalCode().equals(that.getPersonalCode())
-        && getSpecialization() == that.getSpecialization()
+        && getSpecializationIds() == that.getSpecializationIds()
         && getPhoneNumber().equals(that.getPhoneNumber())
         && getDescription().equals(that.getDescription())
         && getAddress().equals(that.getAddress());
@@ -122,7 +121,7 @@ public class DoctorCreateRequest {
         getEmail(),
         getPassword(),
         getPersonalCode(),
-        getSpecialization(),
+        getSpecializationIds(),
         getPhoneNumber(),
         getDescription(),
         getAddress());

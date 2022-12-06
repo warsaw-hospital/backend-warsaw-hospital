@@ -1,8 +1,11 @@
 package com.warsaw.hospital.doctor.entity;
 
+import com.warsaw.hospital.doctor.enums.DoctorSpecializationEnum;
 import com.warsaw.hospital.user.entity.UserEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "doctor")
@@ -16,9 +19,11 @@ public class DoctorEntity {
   private String email;
   private String password;
   private String personalCode;
-  private String specialization;
   private String phoneNumber;
   private String description;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor", orphanRemoval = true)
+  private List<DoctorToSpecializationEntity> specializations = new ArrayList<>();
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
@@ -78,12 +83,31 @@ public class DoctorEntity {
     return this;
   }
 
-  public String getSpecialization() {
-    return specialization;
+  public List<DoctorToSpecializationEntity> getSpecializations() {
+    return specializations;
   }
 
-  public DoctorEntity setSpecialization(String specialization) {
-    this.specialization = specialization;
+  public DoctorEntity setSpecializations(List<DoctorToSpecializationEntity> specializations) {
+    this.specializations = specializations;
+    return this;
+  }
+
+  public DoctorEntity addSpecialization(DoctorSpecializationEntity specialization) {
+    DoctorToSpecializationEntity doctorToSpecializationEntity = new DoctorToSpecializationEntity();
+    doctorToSpecializationEntity.setDoctor(this);
+    doctorToSpecializationEntity.setSpecialization(specialization);
+    return this;
+  }
+
+  public DoctorEntity removeSpecialization(DoctorSpecializationEntity specialization) {
+    specializations.removeIf(
+        doctorToSpecializationEntity ->
+            doctorToSpecializationEntity.getSpecialization().equals(specialization));
+    specialization
+        .getDoctors()
+        .removeIf(
+            doctorToSpecializationEntity ->
+                doctorToSpecializationEntity.getSpecialization().equals(this));
     return this;
   }
 
@@ -124,7 +148,7 @@ public class DoctorEntity {
         && getLastname().equals(that.getLastname())
         && getEmail().equals(that.getEmail())
         && getPassword().equals(that.getPassword())
-        && getSpecialization().equals(that.getSpecialization())
+        && getSpecializations().equals(that.getSpecializations())
         && getPersonalCode().equals(that.getPersonalCode())
         && getPhoneNumber().equals(that.getPhoneNumber())
         && getDescription().equals(that.getDescription());
@@ -139,7 +163,7 @@ public class DoctorEntity {
         getEmail(),
         getPassword(),
         getPersonalCode(),
-        getSpecialization(),
+        getSpecializations(),
         getPhoneNumber(),
         getDescription());
   }

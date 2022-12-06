@@ -90,9 +90,7 @@ public class AuthService {
     String rawPassword = request.getPassword();
 
     Optional<UserEntity> maybeUser = userService.maybeFindByEmail(email);
-    if (maybeUser.isEmpty()
-        || !encoder.matches(rawPassword, maybeUser.get().getPassword())
-        || !maybeUser.get().getVerified()) {
+    if (maybeUser.isEmpty() || !encoder.matches(rawPassword, maybeUser.get().getPassword())) {
       return false;
     }
 

@@ -1,15 +1,16 @@
 package com.warsaw.hospital.doctor.web.response;
 
+import java.util.List;
 import java.util.Objects;
 
 public class DoctorResponse {
   private Long id;
   private String name;
   private String lastname;
-  private String specialization;
   private String email;
   private String phoneNumber;
   private String description;
+  private List<DoctorSpecializationResponse> specializations;
 
   public Long getId() {
     return id;
@@ -38,12 +39,12 @@ public class DoctorResponse {
     return this;
   }
 
-  public String getSpecialization() {
-    return specialization;
+  public List<DoctorSpecializationResponse> getSpecializations() {
+    return specializations;
   }
 
-  public DoctorResponse setSpecialization(String specialization) {
-    this.specialization = specialization;
+  public DoctorResponse setSpecializations(List<DoctorSpecializationResponse> specializations) {
+    this.specializations = specializations;
     return this;
   }
 
@@ -82,7 +83,7 @@ public class DoctorResponse {
     return getId().equals(that.getId())
         && getName().equals(that.getName())
         && getLastname().equals(that.getLastname())
-        && getSpecialization().equals(that.getSpecialization())
+        && getSpecializations().equals(that.getSpecializations())
         && getEmail().equals(that.getEmail())
         && getPhoneNumber().equals(that.getPhoneNumber())
         && getDescription().equals(that.getDescription());
@@ -94,7 +95,7 @@ public class DoctorResponse {
         getId(),
         getName(),
         getLastname(),
-        getSpecialization(),
+        getSpecializations(),
         getEmail(),
         getPhoneNumber(),
         getDescription());

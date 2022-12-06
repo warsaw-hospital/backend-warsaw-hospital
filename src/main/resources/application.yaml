@@ -20,14 +20,14 @@ spring:
     driver-class-name: org.postgresql.Driver
   flyway:
     baselineOnMigrate: true
-    locations: "classpath:db/migration/common, classpath:db/migration/data"
+    locations: "classpath:db/migration/common, classpath:db/migration/data, classpath:db/migration/data/dev"
 app:
   BASE_URL: http://localhost:3000
-  generated-password-length: 12
-  thread-count: 20
   jwt:
     secret: ${JWT_SECRET:Am@z11nGS3eEcR4tBBDcbb}
     expirationMs: 172800000 # 2 days
+  generated-password-length: 12
+  thread-count: 20
 
 
 

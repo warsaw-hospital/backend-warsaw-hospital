@@ -1,7 +1,5 @@
 package com.warsaw.hospital.user.entity;
 
-import com.warsaw.hospital.user.entity.enums.UserType;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,19 +22,12 @@ public class UserEntity {
 
   @Column(unique = true)
   private String personalCode;
-  private Long representedDoctorId;
 
   private String phoneNumber;
   private String address;
 
-  @Enumerated(EnumType.STRING)
-  private UserType userType;
-
+  private LocalDateTime createdAt;
   private LocalDateTime lastLogin;
-  private LocalDateTime creation;
-  private Boolean fullyCreated;
-
-  private Boolean verified;
 
   @Column(unique = true)
   private String passChangeToken;
@@ -53,15 +44,6 @@ public class UserEntity {
 
   public UserEntity setId(Long id) {
     this.id = id;
-    return this;
-  }
-
-  public Boolean getFullyCreated() {
-    return fullyCreated;
-  }
-
-  public UserEntity setFullyCreated(Boolean fullyCreated) {
-    this.fullyCreated = fullyCreated;
     return this;
   }
 
@@ -128,15 +110,6 @@ public class UserEntity {
     return this;
   }
 
-  public UserType getUserType() {
-    return userType;
-  }
-
-  public UserEntity setUserType(UserType userType) {
-    this.userType = userType;
-    return this;
-  }
-
   public LocalDateTime getLastLogin() {
     return lastLogin;
   }
@@ -164,21 +137,12 @@ public class UserEntity {
     return this;
   }
 
-  public Boolean getVerified() {
-    return verified;
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
-  public UserEntity setVerified(Boolean verified) {
-    this.verified = verified;
-    return this;
-  }
-
-  public LocalDateTime getCreation() {
-    return creation;
-  }
-
-  public UserEntity setCreation(LocalDateTime creation) {
-    this.creation = creation;
+  public UserEntity setCreatedAt(LocalDateTime creation) {
+    this.createdAt = creation;
     return this;
   }
 
@@ -224,11 +188,8 @@ public class UserEntity {
         && getPersonalCode().equals(that.getPersonalCode())
         && getPhoneNumber().equals(that.getPhoneNumber())
         && getAddress().equals(that.getAddress())
-        && getCreation().equals(that.getCreation())
-        && getFullyCreated().equals(that.getFullyCreated())
-        && getUserType() == that.getUserType()
+        && getCreatedAt().equals(that.getCreatedAt())
         && getTokenCreationDate() == that.getTokenCreationDate()
-        && Objects.equals(getVerified(), that.getVerified())
         && Objects.equals(getLastLogin(), that.getLastLogin());
   }
 
@@ -239,15 +200,12 @@ public class UserEntity {
         getName(),
         getLastname(),
         getEmail(),
-        getFullyCreated(),
         getPassword(),
         getPersonalCode(),
         getPhoneNumber(),
         getAddress(),
-        getCreation(),
-        getUserType(),
+        getCreatedAt(),
         getTokenCreationDate(),
-        getVerified(),
         getLastLogin());
   }
 }

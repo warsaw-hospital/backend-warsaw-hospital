@@ -50,17 +50,35 @@ CREATE TABLE IF NOT EXISTS email
 
 CREATE TABLE IF NOT EXISTS doctor
 (
-    id             SERIAL PRIMARY KEY,
-    name           text    NOT NULL,
-    lastname       text    NOT NULL,
-    email          text    NOT NULL UNIQUE,
-    password       text,
-    phone_number   text    NOT NULL,
-    specialization text    NOT NULL,
-    description    text    NOT NULL,
-    user_id        INTEGER NOT NULL,
+    id              SERIAL PRIMARY KEY,
+    name            text    NOT NULL,
+    lastname        text    NOT NULL,
+    email           text    NOT NULL UNIQUE,
+    password        text,
+    personal_code   text    NOT NULL UNIQUE,
+    phone_number    text    NOT NULL,
+    description     text    NOT NULL,
+    user_id         INTEGER NOT NULL,
+    specializations text[]  NOT NULL,
 
     FOREIGN KEY (user_id) references account (id)
+);
+
+CREATE TABLE IF NOT EXISTS doctor_specialization
+(
+    id          SERIAL PRIMARY KEY,
+    name        text NOT NULL UNIQUE,
+    description text
+);
+
+CREATE TABLE IF NOT EXISTS doctor_to_specialization
+(
+    id                SERIAL PRIMARY KEY,
+    doctor_id         INTEGER NOT NULL,
+    specialization_id INTEGER NOT NULL,
+
+    FOREIGN KEY (doctor_id) REFERENCES doctor (id),
+    FOREIGN KEY (specialization_id) REFERENCES doctor_specialization (id)
 );
 
 CREATE TABLE IF NOT EXISTS work_day

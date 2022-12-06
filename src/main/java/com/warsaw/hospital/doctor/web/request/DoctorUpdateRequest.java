@@ -1,10 +1,9 @@
 package com.warsaw.hospital.doctor.web.request;
 
-import com.warsaw.hospital.doctor.enums.DoctorSpecializationEnum;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
 
 public class DoctorUpdateRequest {
@@ -15,10 +14,10 @@ public class DoctorUpdateRequest {
   @NotEmpty @Email private String email;
   @NotEmpty private String password;
   @NotEmpty private String personalCode;
-  @NotEmpty private DoctorSpecializationEnum specialization;
   @NotEmpty private String phoneNumber;
   @NotEmpty private String description;
   @NotEmpty private String address;
+  @NotEmpty private List<Long> specializationIds;
 
   public Long getId() {
     return id;
@@ -74,12 +73,12 @@ public class DoctorUpdateRequest {
     return this;
   }
 
-  public DoctorSpecializationEnum getSpecialization() {
-    return specialization;
+  public List<Long> getSpecializationIds() {
+    return specializationIds;
   }
 
-  public DoctorUpdateRequest setSpecialization(DoctorSpecializationEnum specialization) {
-    this.specialization = specialization;
+  public DoctorUpdateRequest setSpecializationIds(List<Long> specializationIds) {
+    this.specializationIds = specializationIds;
     return this;
   }
 
@@ -121,7 +120,7 @@ public class DoctorUpdateRequest {
         && getEmail().equals(that.getEmail())
         && getPassword().equals(that.getPassword())
         && getPersonalCode().equals(that.getPersonalCode())
-        && getSpecialization() == that.getSpecialization()
+        && getSpecializationIds() == that.getSpecializationIds()
         && getPhoneNumber().equals(that.getPhoneNumber())
         && getDescription().equals(that.getDescription())
         && getAddress().equals(that.getAddress());
@@ -136,7 +135,7 @@ public class DoctorUpdateRequest {
         getEmail(),
         getPassword(),
         getPersonalCode(),
-        getSpecialization(),
+        getSpecializationIds(),
         getPhoneNumber(),
         getDescription(),
         getAddress());
