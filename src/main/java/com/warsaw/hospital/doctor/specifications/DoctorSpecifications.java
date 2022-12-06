@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 
 public class DoctorSpecifications {
+  //TODO: add more specifications
   public static List<Specification<DoctorEntity>> getSpecifications(
       @Nullable String search, @Nullable DoctorSpecializationEnum specialization) {
     return List.of();

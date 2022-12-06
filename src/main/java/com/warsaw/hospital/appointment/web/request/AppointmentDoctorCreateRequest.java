@@ -10,10 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class AppointmentUpdateRequest {
-  @NotNull(message = "id is ${validatedValue}, but it must not be null")
-  private Long id;
-
+public class AppointmentDoctorCreateRequest {
   @NotEmpty(message = "description is ${validatedValue}, but it must not be null")
   private String description;
 
@@ -38,23 +35,11 @@ public class AppointmentUpdateRequest {
   @NotNull(message = "doctorId is ${validatedValue}, but it must not be null")
   private Long userId;
 
-  @NotNull(message = "doctorId is ${validatedValue}, but it must not be null")
-  private Long doctorId;
-
-  public Long getId() {
-    return id;
-  }
-
-  public AppointmentUpdateRequest setId(Long id) {
-    this.id = id;
-    return this;
-  }
-
   public String getDescription() {
     return description;
   }
 
-  public AppointmentUpdateRequest setDescription(String description) {
+  public AppointmentDoctorCreateRequest setDescription(String description) {
     this.description = description;
     return this;
   }
@@ -63,7 +48,7 @@ public class AppointmentUpdateRequest {
     return appointmentDate;
   }
 
-  public AppointmentUpdateRequest setAppointmentDate(LocalDate appointmentDate) {
+  public AppointmentDoctorCreateRequest setAppointmentDate(LocalDate appointmentDate) {
     this.appointmentDate = appointmentDate;
     return this;
   }
@@ -72,7 +57,7 @@ public class AppointmentUpdateRequest {
     return appointmentStartTime;
   }
 
-  public AppointmentUpdateRequest setAppointmentStartTime(LocalTime appointmentStartTime) {
+  public AppointmentDoctorCreateRequest setAppointmentStartTime(LocalTime appointmentStartTime) {
     this.appointmentStartTime = appointmentStartTime;
     return this;
   }
@@ -81,7 +66,7 @@ public class AppointmentUpdateRequest {
     return appointmentEndTime;
   }
 
-  public AppointmentUpdateRequest setAppointmentEndTime(LocalTime appointmentEndTime) {
+  public AppointmentDoctorCreateRequest setAppointmentEndTime(LocalTime appointmentEndTime) {
     this.appointmentEndTime = appointmentEndTime;
     return this;
   }
@@ -90,7 +75,7 @@ public class AppointmentUpdateRequest {
     return createdAt;
   }
 
-  public AppointmentUpdateRequest setCreatedAt(LocalDateTime createdAt) {
+  public AppointmentDoctorCreateRequest setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -99,7 +84,7 @@ public class AppointmentUpdateRequest {
     return status;
   }
 
-  public AppointmentUpdateRequest setStatus(AppointmentStatusEnum status) {
+  public AppointmentDoctorCreateRequest setStatus(AppointmentStatusEnum status) {
     this.status = status;
     return this;
   }
@@ -108,17 +93,8 @@ public class AppointmentUpdateRequest {
     return userId;
   }
 
-  public AppointmentUpdateRequest setUserId(Long userId) {
+  public AppointmentDoctorCreateRequest setUserId(Long userId) {
     this.userId = userId;
-    return this;
-  }
-
-  public Long getDoctorId() {
-    return doctorId;
-  }
-
-  public AppointmentUpdateRequest setDoctorId(Long doctorId) {
-    this.doctorId = doctorId;
     return this;
   }
 
@@ -126,29 +102,25 @@ public class AppointmentUpdateRequest {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    AppointmentUpdateRequest that = (AppointmentUpdateRequest) o;
-    return getId().equals(that.getId())
-        && getDescription().equals(that.getDescription())
+    AppointmentDoctorCreateRequest that = (AppointmentDoctorCreateRequest) o;
+    return getDescription().equals(that.getDescription())
         && getAppointmentDate().equals(that.getAppointmentDate())
         && getAppointmentStartTime().equals(that.getAppointmentStartTime())
         && getAppointmentEndTime().equals(that.getAppointmentEndTime())
         && getCreatedAt().equals(that.getCreatedAt())
         && getStatus() == that.getStatus()
-        && getUserId().equals(that.getUserId())
-        && getDoctorId().equals(that.getDoctorId());
+        && getUserId().equals(that.getUserId());
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        getId(),
         getDescription(),
         getAppointmentDate(),
         getAppointmentStartTime(),
         getAppointmentEndTime(),
         getCreatedAt(),
         getStatus(),
-        getUserId(),
-        getDoctorId());
+        getUserId());
   }
 }
