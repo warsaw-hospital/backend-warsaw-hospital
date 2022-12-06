@@ -1,13 +1,19 @@
 package com.warsaw.hospital.workschedule;
 
+import com.opengamma.strata.basics.ReferenceData;
+import com.opengamma.strata.basics.date.HolidayCalendar;
 import com.warsaw.hospital.exception.ApiException;
 import com.warsaw.hospital.workschedule.entity.WorkDayEntity;
 import com.warsaw.hospital.workschedule.entity.WorkScheduleTemplateEntity;
+import com.warsaw.hospital.workschedule.utils.WorkScheduleUtil;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.opengamma.strata.basics.date.HolidayCalendarIds.PLWA;
 
 @Service
 @Transactional
@@ -35,6 +41,8 @@ public class WorkScheduleService {
           .addLabel("doctorId", entity.getDoctor().getId())
           .addLabel("dayOfWeek", entity.getDayOfWeek());
     }
+    List<WorkDayEntity> workDays = generateWorkScheduleFromTemplate(entity);
+    create(workDays);
     return workScheduleTemplateRepository.save(entity);
   }
 
@@ -44,11 +52,14 @@ public class WorkScheduleService {
           .addLabel("doctorId", entity.getDoctor().getId())
           .addLabel("dayOfWeek", entity.getDayOfWeek());
     }
+    List<WorkDayEntity> workDays = generateWorkScheduleFromTemplate(entity);
+    updateWorkDays(workDays, entity.getDoctor().getId());
     return workScheduleTemplateRepository.save(entity);
   }
 
-  public List<WorkScheduleTemplateEntity> update(List<WorkScheduleTemplateEntity> entities) {
-    return entities.stream().map(this::update).collect(Collectors.toList());
+  public List<WorkScheduleTemplateEntity> update(
+      List<WorkScheduleTemplateEntity> entities, Long doctorId) {
+    return entities.stream().map(entity -> update(entity, doctorId)).collect(Collectors.toList());
   }
 
   public WorkScheduleTemplateEntity update(WorkScheduleTemplateEntity entity, Long doctorId) {
@@ -99,6 +110,10 @@ public class WorkScheduleService {
     return workDayRepository.save(entity);
   }
 
+  public List<WorkDayEntity> create(List<WorkDayEntity> entities) {
+    return entities.stream().map(this::create).collect(Collectors.toList());
+  }
+
   public WorkDayEntity update(WorkDayEntity entity) {
     if (!workDayRepository.existsById(entity.getId())) {
       throw ApiException.notFound(ERROR_WORK_DAY_MESSAGE_BASE + "notFound")
@@ -113,5 +128,28 @@ public class WorkScheduleService {
           .addLabel("doctorId", entity.getDoctor().getId());
     }
     return update(entity);
+  }
+
+  public List<WorkDayEntity> updateWorkDays(List<WorkDayEntity> entities, Long doctorId) {
+    return entities.stream().map(entity -> update(entity, doctorId)).collect(Collectors.toList());
+  }
+
+  private List<WorkDayEntity> generateWorkScheduleFromTemplate(
+      WorkScheduleTemplateEntity workSchedule) {
+    HolidayCalendar holidayCalendar = PLWA.resolve(ReferenceData.standard());
+    List<LocalDate> workDates =
+        WorkScheduleUtil.getAllDatesByWeekDayThreeMonthsFromNow(workSchedule.getDayOfWeek());
+
+    return workDates.stream()
+        .map(
+            workDate ->
+                new WorkDayEntity()
+                    .setWorkDate(workDate)
+                    .setStartHour(workSchedule.getStartHour())
+                    .setEndHour(workSchedule.getEndHour())
+                    .setIsHoliday(holidayCalendar.isHoliday(workDate))
+                    .setIsDayOff(false)
+                    .setDoctor(workSchedule.getDoctor()))
+        .collect(Collectors.toList());
   }
 }
