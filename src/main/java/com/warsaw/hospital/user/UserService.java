@@ -78,6 +78,10 @@ public class UserService {
     return repository.findByEmail(email);
   }
 
+  public Optional<UserEntity> maybeFinfByPersonalCode(String personalCode) {
+    return repository.findByPersonalCode(personalCode);
+  }
+
   @Nullable
   public UserEntity getUser(AuthenticatedProfile profile) throws ApiException {
     if (profile == null) {
@@ -133,16 +137,11 @@ public class UserService {
   public UserEntity updateBy(UserInitialUpdateRequest request, AuthenticatedProfile profile) {
 
     UserEntity user = findById(profile.getId());
-    if (user.getFullyCreated()) {
-      throw ApiException.bad("err.user.alreadyFullyCreated");
-    }
 
     user.setEmail(request.getEmail())
         .setPhoneNumber(request.getPhoneNumber())
         .setAddress(request.getAddress())
-        .setUserType(request.getUserType())
-        .setPassword(encoder.encode(request.getPassword()))
-        .setFullyCreated(true);
+        .setPassword(encoder.encode(request.getPassword()));
 
     return repository.save(user);
   }

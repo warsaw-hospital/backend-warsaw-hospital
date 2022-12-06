@@ -4,7 +4,8 @@ import com.warsaw.hospital.auth.config.AuthenticatedProfile;
 import com.warsaw.hospital.auth.utils.CookieUtil;
 import com.warsaw.hospital.auth.utils.JwtUtil;
 import com.warsaw.hospital.auth.utils.PasswordUtil;
-import com.warsaw.hospital.auth.web.request.EmailPasswordLoginRequest;
+import com.warsaw.hospital.auth.web.request.LoginRequest;
+import com.warsaw.hospital.auth.web.request.RegisterRequest;
 import com.warsaw.hospital.auth.web.response.StatusResponse;
 import com.warsaw.hospital.email.EmailService;
 import com.warsaw.hospital.emailtemplate.EmailTemplateService;
@@ -84,15 +85,12 @@ public class AuthService {
    * @param request username and password login request.
    * @param response information about the request.
    */
-  public Boolean login(EmailPasswordLoginRequest request, HttpServletResponse response) {
+  public Boolean login(LoginRequest request, HttpServletResponse response) {
     String email = request.getEmail();
     String rawPassword = request.getPassword();
 
-    // Get a user with correct username if he exists, else throw exception
     Optional<UserEntity> maybeUser = userService.maybeFindByEmail(email);
-    if (maybeUser.isEmpty()
-        || !encoder.matches(rawPassword, maybeUser.get().getPassword())
-        || !maybeUser.get().getVerified()) {
+    if (maybeUser.isEmpty() || !encoder.matches(rawPassword, maybeUser.get().getPassword())) {
       return false;
     }
 
@@ -102,8 +100,26 @@ public class AuthService {
     return true;
   }
 
+  public Boolean register(RegisterRequest request, HttpServletResponse response) {
+    UserEntity user =
+        new UserEntity()
+            .setName(request.getName())
+            .setLastname(request.getLastname())
+            .setEmail(request.getEmail());
+
+    userService.create(user);
+    addAuthorityCookie(user, response);
+    return true;
+  }
+
+  /**
+   * When a user logs off, we update the user's last logoff time and delete the authorization
+   * cookie.
+   *
+   * @param profile The profile object that was created when the user logged in.
+   * @param response The HttpServletResponse object.
+   */
   public void logoff(AuthenticatedProfile profile, HttpServletResponse response) {
-    // Cleanup
     UserEntity user = userService.findById(profile.getUserId());
     userService.update(user);
 

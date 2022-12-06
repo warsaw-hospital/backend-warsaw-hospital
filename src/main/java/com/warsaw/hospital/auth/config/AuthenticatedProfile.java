@@ -11,22 +11,17 @@ import java.util.stream.Collectors;
 
 public class AuthenticatedProfile implements Authentication {
   private Long id;
-  private Long representedUserId;
+  private Long representedDoctorId;
   private String accessToken;
   private String refreshToken;
   private boolean authenticated;
   private List<String> authorityList = new ArrayList<>();
 
-  public AuthenticatedProfile() {
-
-  }
+  public AuthenticatedProfile() {}
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorityList
-            .stream()
-            .map((SimpleGrantedAuthority::new))
-            .collect(Collectors.toList());
+    return authorityList.stream().map((SimpleGrantedAuthority::new)).collect(Collectors.toList());
   }
 
   @Override
@@ -55,8 +50,8 @@ public class AuthenticatedProfile implements Authentication {
   }
 
   public Long getUserId() {
-    if (representedUserId != null) {
-      return representedUserId;
+    if (representedDoctorId != null) {
+      return representedDoctorId;
     }
     return id;
   }
@@ -70,12 +65,12 @@ public class AuthenticatedProfile implements Authentication {
     return this;
   }
 
-  public Long getRepresentedUserId() {
-    return representedUserId;
+  public Long getRepresentedDoctorId() {
+    return representedDoctorId;
   }
 
-  public AuthenticatedProfile setRepresentedUserId(Long representedUserId) {
-    this.representedUserId = representedUserId;
+  public AuthenticatedProfile setRepresentedDoctorId(Long representedDoctorId) {
+    this.representedDoctorId = representedDoctorId;
     return this;
   }
 

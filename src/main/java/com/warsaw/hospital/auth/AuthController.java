@@ -1,11 +1,11 @@
 package com.warsaw.hospital.auth;
 
 import com.warsaw.hospital.auth.config.AuthenticatedProfile;
-import com.warsaw.hospital.auth.web.request.EmailPasswordLoginRequest;
+import com.warsaw.hospital.auth.web.request.LoginRequest;
+import com.warsaw.hospital.auth.web.request.RegisterRequest;
 import com.warsaw.hospital.auth.web.response.StatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +15,6 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-
-  @Value("${app.BASE_URL}")
-  private String BASE_URL;
 
   private final AuthService service;
 
@@ -39,10 +36,14 @@ public class AuthController {
     return valid;
   }
 
+  @GetMapping("/register")
+  public Boolean register(@RequestBody RegisterRequest request, HttpServletResponse httpResponse) {
+    return service.register(request, httpResponse);
+  }
+
   @Operation(summary = "Login by passing username and password request")
   @PostMapping("/login")
-  public Boolean login(
-      @RequestBody EmailPasswordLoginRequest request, HttpServletResponse httpResponse) {
+  public Boolean login(@RequestBody LoginRequest request, HttpServletResponse httpResponse) {
     return service.login(request, httpResponse);
   }
 

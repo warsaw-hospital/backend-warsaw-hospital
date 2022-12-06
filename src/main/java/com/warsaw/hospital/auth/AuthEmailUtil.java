@@ -20,7 +20,7 @@ public class AuthEmailUtil {
   public static Map<String, String> getDataForEmail(UserEntity entity) {
     Map<String, String> data = new HashMap<>();
     data.put(USER_NAME, entity.getName());
-    data.put(USER_LASTNAME, entity.getSurname());
+    data.put(USER_LASTNAME, entity.getLastname());
     data.put(USER_EMAIL, entity.getName());
     return data;
   }
