@@ -38,6 +38,9 @@ public class UserEntity {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
   private List<UserToUserRoleEntity> roles = new ArrayList<>();
 
+  @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+  private UserToDoctorEntity doctor;
+
   public Long getId() {
     return id;
   }
@@ -175,11 +178,19 @@ public class UserEntity {
     return this;
   }
 
+  public UserToDoctorEntity getDoctor() {
+    return doctor;
+  }
+
+  public UserEntity setDoctor(UserToDoctorEntity doctor) {
+    this.doctor = doctor;
+    return this;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof UserEntity)) return false;
-    UserEntity that = (UserEntity) o;
+    if (!(o instanceof UserEntity that)) return false;
     return getId().equals(that.getId())
         && getName().equals(that.getName())
         && getLastname().equals(that.getLastname())
@@ -206,6 +217,7 @@ public class UserEntity {
         getAddress(),
         getCreatedAt(),
         getTokenCreationDate(),
-        getLastLogin());
+        getLastLogin(),
+        getDoctor());
   }
 }

@@ -20,7 +20,7 @@ public class DoctorUserController {
   }
 
   @Operation(summary = "Get all doctors filtered by.")
-  @GetMapping
+  @GetMapping("/filter")
   public List<DoctorResponse> findAllFilteredBy(
       @RequestParam(required = false) String search,
       @RequestParam(required = false) DoctorSpecializationEnum specialization) {

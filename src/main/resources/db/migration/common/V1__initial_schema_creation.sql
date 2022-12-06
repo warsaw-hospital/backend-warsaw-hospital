@@ -59,9 +59,17 @@ CREATE TABLE IF NOT EXISTS doctor
     phone_number    text    NOT NULL,
     description     text    NOT NULL,
     user_id         INTEGER NOT NULL,
-    specializations text[]  NOT NULL,
 
-    FOREIGN KEY (user_id) references account (id)
+    FOREIGN KEY (user_id) REFERENCES account (id)
+);
+
+CREATE TABLE IF NOT EXISTS user_to_doctor
+(
+    id        SERIAL PRIMARY KEY,
+    user_id   int NOT NULL,
+    doctor_id int NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES account (id),
+    FOREIGN KEY (doctor_id) REFERENCES doctor (id)
 );
 
 CREATE TABLE IF NOT EXISTS doctor_specialization
@@ -118,6 +126,24 @@ CREATE TABLE IF NOT EXISTS appointment
     FOREIGN KEY (user_id) references account (id),
     FOREIGN KEY (doctor_id) references doctor (id)
 );
+
+CREATE TABLE IF NOT EXISTS specialization
+(
+    id          SERIAL PRIMARY KEY,
+    name        text DEFAULT 'PENDING',
+    description text
+);
+
+CREATE TABLE IF NOT EXISTS doctor_to_specialization
+(
+    id                SERIAL PRIMARY KEY,
+    doctor_id         INTEGER NOT NULL,
+    specialization_id INTEGER NOT NULL,
+
+    FOREIGN KEY (doctor_id) REFERENCES doctor (id),
+    FOREIGN KEY (specialization_id) REFERENCES specialization (id)
+);
+
 
 
 

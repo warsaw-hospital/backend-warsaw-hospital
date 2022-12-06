@@ -3,6 +3,7 @@ package com.warsaw.hospital.appointment;
 import com.warsaw.hospital.appointment.entity.AppointmentEntity;
 import com.warsaw.hospital.appointment.entity.enums.AppointmentStatusEnum;
 import com.warsaw.hospital.appointment.specifications.AppointmentSpecifications;
+import com.warsaw.hospital.doctor.entity.DoctorEntity;
 import com.warsaw.hospital.exception.ApiException;
 import com.warsaw.hospital.user.UserService;
 import com.warsaw.hospital.user.entity.UserEntity;
@@ -58,8 +59,8 @@ public class AppointmentService {
 
   public AppointmentEntity doctorCreate(AppointmentEntity entity, Long userId) throws ApiException {
     UserEntity user = userService.findById(userId);
-    // TODO: Add user to doctor relationship and update this method
-    entity.setUser(user);
+    DoctorEntity doctor = user.getDoctor().getDoctor();
+    entity.setDoctor(doctor);
     return create(entity);
   }
 
@@ -73,7 +74,7 @@ public class AppointmentService {
   public AppointmentEntity userUpdate(AppointmentEntity entity, Long userId) throws ApiException {
     UserEntity user = userService.findById(userId);
     if (!user.getId().equals(entity.getUser().getId())) {
-      throw ApiException.bad(ERROR_MESSAGE_BASE + "forbidden");
+      throw ApiException.bad(ERROR_MESSAGE_BASE + "wrongUser");
     }
     entity.setUser(user);
     return update(entity);
@@ -81,8 +82,11 @@ public class AppointmentService {
 
   public AppointmentEntity doctorUpdate(AppointmentEntity entity, Long userId) throws ApiException {
     UserEntity user = userService.findById(userId);
-    // TODO: Add user to doctor relationship and update this method
-    entity.setUser(user);
+    DoctorEntity doctor = user.getDoctor().getDoctor();
+    if (!doctor.getId().equals(entity.getDoctor().getId())) {
+      throw ApiException.bad(ERROR_MESSAGE_BASE + "wrongDoctor");
+    }
+    entity.setDoctor(doctor);
     return update(entity);
   }
 

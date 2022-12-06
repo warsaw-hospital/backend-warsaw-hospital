@@ -18,7 +18,7 @@ public class DoctorSpecifications {
       List<String> words = Arrays.stream(search.split(" ")).map(word -> "%" + word + "%").toList();
       for (String word : words) {
         predicates.add(cb.like(cb.lower(root.get("name")), word.toLowerCase()));
-        predicates.add(cb.like(cb.lower(root.get("surname")), word.toLowerCase()));
+        predicates.add(cb.like(cb.lower(root.get("lastname")), word.toLowerCase()));
         predicates.add(cb.like(cb.lower(root.get("email")), word.toLowerCase()));
         predicates.add(cb.like(root.get("phoneNumber"), word));
       }

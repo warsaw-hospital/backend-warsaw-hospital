@@ -22,6 +22,7 @@ public class AppointmentEntity {
   private LocalTime appointmentEndTime;
   private LocalDateTime createdAt;
 
+  @Column(name = "status")
   @Enumerated(EnumType.STRING)
   private AppointmentStatusEnum status;
 
