@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "doctor_specialization")
+@Entity(name = "specialization")
 public class DoctorSpecializationEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "name")
   @Enumerated(EnumType.STRING)
   private DoctorSpecializationEnum name;
 

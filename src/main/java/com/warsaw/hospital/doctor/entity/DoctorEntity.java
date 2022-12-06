@@ -1,7 +1,6 @@
 package com.warsaw.hospital.doctor.entity;
 
-import com.warsaw.hospital.doctor.enums.DoctorSpecializationEnum;
-import com.warsaw.hospital.user.entity.UserEntity;
+import com.warsaw.hospital.user.entity.UserToDoctorEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,9 +24,8 @@ public class DoctorEntity {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor", orphanRemoval = true)
   private List<DoctorToSpecializationEntity> specializations = new ArrayList<>();
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
+  @OneToOne(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+  private UserToDoctorEntity user;
 
   public Long getId() {
     return id;
@@ -107,7 +105,7 @@ public class DoctorEntity {
         .getDoctors()
         .removeIf(
             doctorToSpecializationEntity ->
-                doctorToSpecializationEntity.getSpecialization().equals(this));
+                doctorToSpecializationEntity.getSpecialization().equals(specialization));
     return this;
   }
 
@@ -129,11 +127,11 @@ public class DoctorEntity {
     return this;
   }
 
-  public UserEntity getUser() {
+  public UserToDoctorEntity getUser() {
     return user;
   }
 
-  public DoctorEntity setUser(UserEntity user) {
+  public DoctorEntity setUser(UserToDoctorEntity user) {
     this.user = user;
     return this;
   }

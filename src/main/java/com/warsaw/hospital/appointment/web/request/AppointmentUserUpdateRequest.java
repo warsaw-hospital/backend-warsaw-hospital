@@ -1,44 +1,47 @@
-package com.warsaw.hospital.appointment.entity;
+package com.warsaw.hospital.appointment.web.request;
 
 import com.warsaw.hospital.appointment.entity.enums.AppointmentStatusEnum;
-import com.warsaw.hospital.doctor.entity.DoctorEntity;
-import com.warsaw.hospital.user.entity.UserEntity;
 
-import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Entity(name = "appointment")
-public class AppointmentEntity {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AppointmentUserUpdateRequest {
+  @NotNull(message = "id is ${validatedValue}, but it must not be null")
   private Long id;
 
+  @NotEmpty(message = "description is ${validatedValue}, but it must not be null")
   private String description;
+
+  @NotNull(message = "appointmentDate is ${validatedValue}, but it must not be null")
+  @FutureOrPresent(
+      message =
+          "appointmentDate is ${validatedValue}, but the date must be in the present or fitire")
   private LocalDate appointmentDate;
+
+  @NotNull(message = "appointmentStartTime is ${validatedValue}, but it must not be null")
   private LocalTime appointmentStartTime;
+
+  @NotNull(message = "appointmentEndTime is ${validatedValue}, but it must not be null")
   private LocalTime appointmentEndTime;
+
+  @NotNull(message = "createdAt is ${validatedValue}, but it must not be null")
   private LocalDateTime createdAt;
 
-  @Column(name = "status")
-  @Enumerated(EnumType.STRING)
+  @NotNull(message = "status is ${validatedValue}, but it must not be null")
   private AppointmentStatusEnum status;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
-
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "doctor_id")
-  private DoctorEntity doctor;
+  private Long doctorId;
 
   public Long getId() {
     return id;
   }
 
-  public AppointmentEntity setId(Long id) {
+  public AppointmentUserUpdateRequest setId(Long id) {
     this.id = id;
     return this;
   }
@@ -47,7 +50,7 @@ public class AppointmentEntity {
     return description;
   }
 
-  public AppointmentEntity setDescription(String description) {
+  public AppointmentUserUpdateRequest setDescription(String description) {
     this.description = description;
     return this;
   }
@@ -56,7 +59,7 @@ public class AppointmentEntity {
     return appointmentDate;
   }
 
-  public AppointmentEntity setAppointmentDate(LocalDate appointmentDate) {
+  public AppointmentUserUpdateRequest setAppointmentDate(LocalDate appointmentDate) {
     this.appointmentDate = appointmentDate;
     return this;
   }
@@ -65,7 +68,7 @@ public class AppointmentEntity {
     return appointmentStartTime;
   }
 
-  public AppointmentEntity setAppointmentStartTime(LocalTime appointmentStartTime) {
+  public AppointmentUserUpdateRequest setAppointmentStartTime(LocalTime appointmentStartTime) {
     this.appointmentStartTime = appointmentStartTime;
     return this;
   }
@@ -74,7 +77,7 @@ public class AppointmentEntity {
     return appointmentEndTime;
   }
 
-  public AppointmentEntity setAppointmentEndTime(LocalTime appointmentEndTime) {
+  public AppointmentUserUpdateRequest setAppointmentEndTime(LocalTime appointmentEndTime) {
     this.appointmentEndTime = appointmentEndTime;
     return this;
   }
@@ -83,7 +86,7 @@ public class AppointmentEntity {
     return createdAt;
   }
 
-  public AppointmentEntity setCreatedAt(LocalDateTime createdAt) {
+  public AppointmentUserUpdateRequest setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -92,26 +95,17 @@ public class AppointmentEntity {
     return status;
   }
 
-  public AppointmentEntity setStatus(AppointmentStatusEnum status) {
+  public AppointmentUserUpdateRequest setStatus(AppointmentStatusEnum status) {
     this.status = status;
     return this;
   }
 
-  public UserEntity getUser() {
-    return user;
+  public Long getDoctorId() {
+    return doctorId;
   }
 
-  public AppointmentEntity setUser(UserEntity user) {
-    this.user = user;
-    return this;
-  }
-
-  public DoctorEntity getDoctor() {
-    return doctor;
-  }
-
-  public AppointmentEntity setDoctor(DoctorEntity doctor) {
-    this.doctor = doctor;
+  public AppointmentUserUpdateRequest setDoctorId(Long doctorId) {
+    this.doctorId = doctorId;
     return this;
   }
 
@@ -119,7 +113,7 @@ public class AppointmentEntity {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    AppointmentEntity that = (AppointmentEntity) o;
+    AppointmentUserUpdateRequest that = (AppointmentUserUpdateRequest) o;
     return getId().equals(that.getId())
         && getDescription().equals(that.getDescription())
         && getAppointmentDate().equals(that.getAppointmentDate())
@@ -127,8 +121,7 @@ public class AppointmentEntity {
         && getAppointmentEndTime().equals(that.getAppointmentEndTime())
         && getCreatedAt().equals(that.getCreatedAt())
         && getStatus() == that.getStatus()
-        && getUser().equals(that.getUser())
-        && getDoctor().equals(that.getDoctor());
+        && Objects.equals(getDoctorId(), that.getDoctorId());
   }
 
   @Override
@@ -141,7 +134,6 @@ public class AppointmentEntity {
         getAppointmentEndTime(),
         getCreatedAt(),
         getStatus(),
-        getUser(),
-        getDoctor());
+        getDoctorId());
   }
 }

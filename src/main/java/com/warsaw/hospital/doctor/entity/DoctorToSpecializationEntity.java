@@ -1,7 +1,6 @@
 package com.warsaw.hospital.doctor.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.warsaw.hospital.doctor.enums.DoctorSpecializationEnum;
 
 import javax.persistence.*;
 import java.util.Objects;

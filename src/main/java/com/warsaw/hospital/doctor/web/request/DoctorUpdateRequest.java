@@ -8,16 +8,36 @@ import java.util.Objects;
 
 public class DoctorUpdateRequest {
 
-  @NotNull private Long id;
-  @NotEmpty private String name;
-  @NotEmpty private String lastname;
-  @NotEmpty @Email private String email;
-  @NotEmpty private String password;
-  @NotEmpty private String personalCode;
-  @NotEmpty private String phoneNumber;
-  @NotEmpty private String description;
-  @NotEmpty private String address;
-  @NotEmpty private List<Long> specializationIds;
+  @NotNull(message = "id is ${validatedValue}, but it must not be null")
+  private Long id;
+
+  @NotEmpty(message = "name is ${validatedValue}, but it must not be null")
+  private String name;
+
+  @NotEmpty(message = "lastname is ${validatedValue}, but it must not be null")
+  private String lastname;
+
+  @NotEmpty(message = "email is ${validatedValue}, but it must not be null")
+  @Email
+  private String email;
+
+  @NotEmpty(message = "password is ${validatedValue}, but it must not be null")
+  private String password;
+
+  @NotEmpty(message = " personalCode is ${validatedValue}, but it must not be null")
+  private String personalCode;
+
+  @NotEmpty(message = "phoneNumber is ${validatedValue}, but it must not be null")
+  private String phoneNumber;
+
+  @NotEmpty(message = "description is ${validatedValue}, but it must not be null")
+  private String description;
+
+  @NotEmpty(message = "address is ${validatedValue}, but it must not be null")
+  private String address;
+
+  @NotEmpty(message = "specializationIds is ${validatedValue}, but it must not be null")
+  private List<Long> specializationIds;
 
   public Long getId() {
     return id;
