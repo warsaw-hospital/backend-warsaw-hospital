@@ -50,15 +50,15 @@ CREATE TABLE IF NOT EXISTS email
 
 CREATE TABLE IF NOT EXISTS doctor
 (
-    id              SERIAL PRIMARY KEY,
-    name            text    NOT NULL,
-    lastname        text    NOT NULL,
-    email           text    NOT NULL UNIQUE,
-    password        text,
-    personal_code   text    NOT NULL UNIQUE,
-    phone_number    text    NOT NULL,
-    description     text    NOT NULL,
-    user_id         INTEGER NOT NULL,
+    id            SERIAL PRIMARY KEY,
+    name          text    NOT NULL,
+    lastname      text    NOT NULL,
+    email         text    NOT NULL UNIQUE,
+    password      text,
+    personal_code text    NOT NULL UNIQUE,
+    phone_number  text    NOT NULL,
+    description   text    NOT NULL,
+    user_id       INTEGER NOT NULL,
 
     FOREIGN KEY (user_id) REFERENCES account (id)
 );
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS work_day
     start_hour time    NOT NULL,
     end_hour   time    NOT NULL,
     is_holiday boolean DEFAULT FALSE,
-    is_working boolean DEFAULT FALSE,
+    is_day_off boolean DEFAULT TRUE,
     doctor_id  INTEGER NOT NULL,
     FOREIGN KEY (doctor_id) references doctor (id)
 );
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS work_schedule_template
     day_of_week text    NOT NULL,
     start_hour  time    NOT NULL,
     end_hour    time    NOT NULL,
-    is_working  boolean NOT NULL,
+    is_day_off  boolean DEFAULT TRUE,
     doctor_id   INTEGER NOT NULL,
     FOREIGN KEY (doctor_id) references doctor (id)
 );
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS appointment
     start_time  time    NOT NULL,
     end_time    time    NOT NULL,
     created_at  timestamp DEFAULT NOW(),
-    status      text    NOT NULL,
+    status      text      DEFAULT 'PENDING',
     user_id     INTEGER NOT NULL,
     doctor_id   INTEGER NOT NULL,
 
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS appointment
 CREATE TABLE IF NOT EXISTS specialization
 (
     id          SERIAL PRIMARY KEY,
-    name        text DEFAULT 'PENDING',
+    name        text NOT NULL UNIQUE,
     description text
 );
 
