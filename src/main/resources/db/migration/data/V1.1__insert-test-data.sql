@@ -58,10 +58,10 @@ VALUES (1, 1, 12);
 
 
 INSERT INTO work_schedule_template(id, day_of_week, start_hour, end_hour, is_day_off, doctor_id)
-VALUES (1, 1, '9:00', '17:00', false, 1),
-       (2, 2, '9:00', '17:00', false, 1),
-       (3, 3, '9:00', '17:00', false, 1),
-       (4, 4, '9:00', '17:00', false, 1),
-       (5, 5, '9:00', '17:00', false, 1),
-       (6, 6, '9:00', '17:00', true, 1),
-       (7, 7, '9:00', '17:00', true, 1);
+VALUES (1, 'MONDAY', '9:00', '17:00', false, 1),
+       (2, 'TUESDAY', '9:00', '17:00', false, 1),
+       (3, 'WEDNESDAY', '9:00', '17:00', false, 1),
+       (4, 'THURSDAY', '9:00', '17:00', false, 1),
+       (5, 'FRIDAY', '9:00', '17:00', false, 1),
+       (6, 'SATURDAY', '9:00', '17:00', true, 1),
+       (7, 'SUNDAY', '9:00', '17:00', true, 1);

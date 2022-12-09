@@ -11,6 +11,7 @@ import com.warsaw.hospital.auth.config.AuthenticatedProfile;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class AppointmentUserController {
   @PostMapping
   @Operation(summary = "Create a new appointment.")
   public AppointmentResponse create(
-      @RequestBody AppointmentUserCreateRequest request, AuthenticatedProfile profile) {
+      @RequestBody @Valid AppointmentUserCreateRequest request, AuthenticatedProfile profile) {
     AppointmentEntity entity = AppointmentMapper.toEntityUser(request);
     return AppointmentMapper.toResponse(appointmentService.userCreate(entity, profile.getId()));
   }

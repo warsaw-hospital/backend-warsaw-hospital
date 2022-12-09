@@ -23,7 +23,7 @@ public class UserController {
   }
 
   @Operation(summary = "Get user info using authenticated profile")
-  @GetMapping("/me")
+  @GetMapping("/info")
   public UserInfoResponse getUserInfo(AuthenticatedProfile profile) {
     UserEntity user = service.getUser(profile);
     return AuthMapper.toResponse(user);
@@ -38,6 +38,7 @@ public class UserController {
     return service.changePassword(newPassword, oldPassword, profile);
   }
 
+  // TODO: update user update method in controller and in service
   @Operation(summary = "Change password by using authenticated profile")
   @PostMapping("/change/info")
   public UserInfoResponse changeUserInfo(

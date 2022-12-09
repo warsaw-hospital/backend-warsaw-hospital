@@ -54,6 +54,33 @@ public class RegisterRequest {
     return this;
   }
 
+  public String getPersonalCode() {
+    return personalCode;
+  }
+
+  public RegisterRequest setPersonalCode(String personalCode) {
+    this.personalCode = personalCode;
+    return this;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public RegisterRequest setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+    return this;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public RegisterRequest setAddress(String address) {
+    this.address = address;
+    return this;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -62,11 +89,21 @@ public class RegisterRequest {
     return getName().equals(that.getName())
         && getLastname().equals(that.getLastname())
         && getEmail().equals(that.getEmail())
-        && getPassword().equals(that.getPassword());
+        && getPassword().equals(that.getPassword())
+        && getPersonalCode().equals(that.getPersonalCode())
+        && getPhoneNumber().equals(that.getPhoneNumber())
+        && getAddress().equals(that.getAddress());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getName(), getLastname(), getEmail(), getPassword());
+    return Objects.hash(
+        getName(),
+        getLastname(),
+        getEmail(),
+        getPassword(),
+        getPersonalCode(),
+        getPhoneNumber(),
+        getAddress());
   }
 }

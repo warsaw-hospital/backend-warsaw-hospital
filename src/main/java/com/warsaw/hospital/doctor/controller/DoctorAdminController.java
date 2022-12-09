@@ -22,6 +22,7 @@ public class DoctorAdminController {
   @PostMapping
   @Operation(summary = "Create a doctor entity")
   public DoctorResponse create(
+      // TODO: add validation w/ userId, so that one user can't create multiple doctors
       @RequestBody DoctorCreateRequest request, AuthenticatedProfile profile) {
     DoctorEntity entity = service.create(DoctorMapper.toEntity(request));
     return DoctorMapper.toResponse(entity);
@@ -39,7 +40,7 @@ public class DoctorAdminController {
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a doctor entity")
-  public void delete(@PathVariable Long id, AuthenticatedProfile profile) {
+  public void delete(@PathVariable Long id) {
     service.delete(id);
   }
 }

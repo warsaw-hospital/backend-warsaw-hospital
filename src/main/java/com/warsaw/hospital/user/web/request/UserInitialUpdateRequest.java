@@ -1,7 +1,5 @@
 package com.warsaw.hospital.user.web.request;
 
-import com.warsaw.hospital.user.entity.enums.UserType;
-
 import javax.validation.constraints.NotNull;
 import java.util.Locale;
 import java.util.Objects;
@@ -11,7 +9,6 @@ public class UserInitialUpdateRequest {
   @NotNull private String phoneNumber;
   @NotNull private String address;
   @NotNull private String password;
-  @NotNull private UserType userType;
 
   public String getEmail() {
     return email;
@@ -40,15 +37,6 @@ public class UserInitialUpdateRequest {
     return this;
   }
 
-  public UserType getUserType() {
-    return userType;
-  }
-
-  public UserInitialUpdateRequest setUserType(UserType userType) {
-    this.userType = userType;
-    return this;
-  }
-
   public String getPassword() {
     return password;
   }
@@ -66,12 +54,11 @@ public class UserInitialUpdateRequest {
     return getEmail().equals(that.getEmail())
         && getPhoneNumber().equals(that.getPhoneNumber())
         && getAddress().equals(that.getAddress())
-        && getUserType().equals(that.getUserType())
         && getPassword().equals(that.getPassword());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getEmail(), getPhoneNumber(), getAddress(), getUserType(), getPassword());
+    return Objects.hash(getEmail(), getPhoneNumber(), getAddress(), getPassword());
   }
 }

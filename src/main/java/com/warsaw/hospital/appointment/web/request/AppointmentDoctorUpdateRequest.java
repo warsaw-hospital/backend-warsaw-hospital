@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class AppointmentDoctorUpdateRequest {
+public class
+AppointmentDoctorUpdateRequest {
   @NotNull(message = "id is ${validatedValue}, but it must not be null")
   private Long id;
 

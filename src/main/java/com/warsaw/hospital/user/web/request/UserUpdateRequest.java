@@ -3,6 +3,7 @@ package com.warsaw.hospital.user.web.request;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+//TODO: update UserUpdateRequest
 public class UserUpdateRequest {
   @NotNull private String phoneNumber;
   @NotNull private String address;
