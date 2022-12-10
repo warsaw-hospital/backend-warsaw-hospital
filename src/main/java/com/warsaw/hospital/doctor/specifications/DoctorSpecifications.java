@@ -9,13 +9,17 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DoctorSpecifications {
 
   public static Specification<DoctorEntity> filterBySearch(String search) {
     return (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
-      List<String> words = Arrays.stream(search.split(" ")).map(word -> "%" + word + "%").toList();
+      List<String> words =
+          Arrays.stream(search.split(" "))
+              .map(word -> "%" + word + "%")
+              .collect(Collectors.toList());
       for (String word : words) {
         predicates.add(cb.like(cb.lower(root.get("name")), word.toLowerCase()));
         predicates.add(cb.like(cb.lower(root.get("lastname")), word.toLowerCase()));

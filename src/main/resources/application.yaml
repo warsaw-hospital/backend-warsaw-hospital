@@ -1,26 +1,23 @@
+#security:
+#  basic:
+#    enabled: false
+#  management:
+#    enabled: false
 spring:
   jpa:
     hibernate.ddl-auto: none
-  mail:
-    username: warsaw-hospital@gmail.com
-    password: bruh
-    host: kedras.serveriai.lt
-    port: 587
-    properties:
-      smtp:
-        auth: true
-        starttls:
-          enable: true
-      transport:
-        protocol: smtp
   datasource:
+    #    url: jdbc:postgresql://${DB_HOSTNAME}:${DB_PORT}/warsaw-hospital-backend
+    #    username: ${DB_USERNAME}
+    #    password: ${DB_PASSWORD}
     url: jdbc:postgresql://localhost:5435/warsaw-hospital-backend
     username: root
     password: example
     driver-class-name: org.postgresql.Driver
+  #    disable flyway for build
   flyway:
     baselineOnMigrate: true
-    locations: "classpath:db/migration/common, classpath:db/migration/data, classpath:db/migration/data/dev"
+    locations: "classpath:db/migration/common, classpath:db/migration/data"
 app:
   BASE_URL: http://localhost:3000
   jwt:

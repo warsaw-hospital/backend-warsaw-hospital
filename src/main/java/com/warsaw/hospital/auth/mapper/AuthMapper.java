@@ -17,7 +17,9 @@ public class AuthMapper {
     }
 
     List<UserRoleEntity> roles =
-        user.getRoles().stream().map(UserToUserRoleEntity::getUserRole).toList();
+        user.getRoles().stream()
+            .map(UserToUserRoleEntity::getUserRole)
+            .collect(Collectors.toList());
     return response
         .setLoggedIn(true)
         .setName(user.getName())

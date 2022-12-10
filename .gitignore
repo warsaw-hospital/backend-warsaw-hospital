@@ -39,3 +39,6 @@ postgres-data
 .terraform.lock.hcl
 /target/
 /.idea/
+
+### React App ###
+frontend/

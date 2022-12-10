@@ -10,6 +10,7 @@ import com.warsaw.hospital.workschedule.web.response.WorkDayResponse;
 import com.warsaw.hospital.workschedule.web.response.WorkScheduleTemplateResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WorkScheduleMapper {
   public static WorkScheduleTemplateResponse toWorkScheduleTemplateResponse(
@@ -24,7 +25,9 @@ public class WorkScheduleMapper {
 
   public static List<WorkScheduleTemplateResponse> toWorkScheduleTemplateResponses(
       List<WorkScheduleTemplateEntity> entities) {
-    return entities.stream().map(WorkScheduleMapper::toWorkScheduleTemplateResponse).toList();
+    return entities.stream()
+        .map(WorkScheduleMapper::toWorkScheduleTemplateResponse)
+        .collect(Collectors.toList());
   }
 
   public static WorkScheduleTemplateEntity toWorkScheduleTemplateEntity(
@@ -61,7 +64,9 @@ public class WorkScheduleMapper {
 
   public static List<WorkDayEntity> toWorkDayEntities(
       List<WorkDayUpdateRequest> requests, Long doctorId) {
-    return requests.stream().map(request -> toWorkDayEntity(request, doctorId)).toList();
+    return requests.stream()
+        .map(request -> toWorkDayEntity(request, doctorId))
+        .collect(Collectors.toList());
   }
 
   public static WorkDayResponse toWorkDayResponse(WorkDayEntity entity) {
@@ -75,6 +80,8 @@ public class WorkScheduleMapper {
   }
 
   public static List<WorkDayResponse> toWorkDayResponses(List<WorkDayEntity> entities) {
-    return entities.stream().map(WorkScheduleMapper::toWorkDayResponse).toList();
+    return entities.stream()
+        .map(WorkScheduleMapper::toWorkDayResponse)
+        .collect(Collectors.toList());
   }
 }
