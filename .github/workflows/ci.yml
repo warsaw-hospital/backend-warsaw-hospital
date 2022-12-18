@@ -19,5 +19,5 @@ jobs:
           distribution: 'zulu'
           cache: maven
 
-      - name: run tests
-        run: mvn verify
+#      - name: run tests
+#        run: mvn verify
