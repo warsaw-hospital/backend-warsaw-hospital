@@ -3,12 +3,12 @@ package com.warsaw.hospital.auth;
 import com.warsaw.hospital.auth.config.AuthenticatedProfile;
 import com.warsaw.hospital.auth.utils.CookieUtil;
 import com.warsaw.hospital.auth.utils.JwtUtil;
-import com.warsaw.hospital.auth.utils.PasswordUtil;
 import com.warsaw.hospital.auth.web.request.LoginRequest;
-import com.warsaw.hospital.auth.web.request.RegisterRequest;
 import com.warsaw.hospital.auth.web.response.StatusResponse;
+import com.warsaw.hospital.doctor.DoctorService;
 import com.warsaw.hospital.user.UserService;
 import com.warsaw.hospital.user.entity.UserEntity;
+import com.warsaw.hospital.user.entity.UserToDoctorEntity;
 import com.warsaw.hospital.user.entity.UserToUserRoleEntity;
 import com.warsaw.hospital.userrole.UserRoleService;
 import com.warsaw.hospital.userrole.entity.UserRoleEntity;
@@ -34,6 +34,7 @@ public class AuthService {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
   private final UserService userService;
+  private final DoctorService doctorService;
   private final PasswordEncoder encoder;
   private final JwtUtil jwtUtil;
   private final CookieUtil cookieUtil;
@@ -47,12 +48,14 @@ public class AuthService {
 
   public AuthService(
       UserService userService,
+      DoctorService doctorService,
       PasswordEncoder encoder,
       JwtUtil jwtUtil,
       CookieUtil cookieUtil,
       UserRoleService userRoleService) {
     this.userService = userService;
     this.encoder = encoder;
+    this.doctorService = doctorService;
     this.jwtUtil = jwtUtil;
     this.cookieUtil = cookieUtil;
     this.userRoleService = userRoleService;
@@ -80,16 +83,43 @@ public class AuthService {
     return true;
   }
 
-  public Boolean register(RegisterRequest request, HttpServletResponse response) {
-    UserEntity user =
-        new UserEntity()
-            .setName(request.getName())
-            .setLastname(request.getLastname())
-            .setEmail(request.getEmail());
-
+  public Boolean register(UserEntity user, HttpServletResponse response) {
+    user.setLastLogin(LocalDateTime.now())
+        .setPassword(encoder.encode(user.getPassword()))
+        .setCreatedAt(LocalDateTime.now());
+    UserToUserRoleEntity toUserRole =
+        new UserToUserRoleEntity().setUserRole(userRoleService.findById(1L));
+    user.addToUserRole(toUserRole);
+     addAuthorityCookie(user, response);
     userService.create(user);
+
+    return true;
+  }
+
+  public Boolean doctorLogin(LoginRequest request, HttpServletResponse response) {
+    String email = request.getEmail();
+    String rawPassword = request.getPassword();
+
+    Optional<UserEntity> maybeUser = userService.maybeFindByEmail(email);
+
+    if (maybeUser.isEmpty() || !encoder.matches(rawPassword, maybeUser.get().getPassword())) {
+      return false;
+    }
+
+    //    Optional<DoctorEntity> maybeDoctor =
+    // doctorService.maybeFindByUserId(maybeUser.get().getId());
+    //    if (maybeDoctor.isEmpty()) {
+    //      return false;
+    //    }
+
+    UserToDoctorEntity userToDoctor = maybeUser.get().getDoctor();
+    if (userToDoctor == null) {
+      return false;
+    }
+
+    UserEntity user = maybeUser.get();
     userService.update(user.setLastLogin(LocalDateTime.now()));
-    addAuthorityCookie(user, response);
+    addAuthorityCookie(maybeUser.get(), response);
     return true;
   }
 
@@ -118,6 +148,7 @@ public class AuthService {
     List<GrantedAuthority> authorities =
         AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
     String token = jwtUtil.generateJwtToken(user.getId(), null, null, authorities);
+    System.out.println("token" + token);
     cookieUtil.addAuthorizationCookie(token, response);
   }
 

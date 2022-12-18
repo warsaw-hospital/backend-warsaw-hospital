@@ -58,15 +58,6 @@ public class UserService {
                     .addLabel("personalCode", personalCode));
   }
 
-  public UserEntity findByPassChangeToken(String passChangeToken) throws ApiException {
-    return repository
-        .findByPassChangeToken(passChangeToken)
-        .orElseThrow(
-            () ->
-                ApiException.notFound(ERROR_MESSAGE_BASE + "notFound")
-                    .addLabel("passChangeToken", passChangeToken));
-  }
-
   public UserEntity findByEmail(String email) throws ApiException {
     return repository
         .findByEmail(email)
@@ -78,7 +69,7 @@ public class UserService {
     return repository.findByEmail(email);
   }
 
-  public Optional<UserEntity> maybeFinfByPersonalCode(String personalCode) {
+  public Optional<UserEntity> maybeFindByPersonalCode(String personalCode) {
     return repository.findByPersonalCode(personalCode);
   }
 
@@ -107,10 +98,6 @@ public class UserService {
 
   public Boolean existsByPersonalCode(String personalCode) {
     return repository.existsByPersonalCode(personalCode);
-  }
-
-  public Boolean existsByPasswordChangeToken(String passChangeToken) {
-    return repository.existsByPassChangeToken(passChangeToken);
   }
 
   public boolean changePassword(

@@ -11,13 +11,9 @@ import java.util.Optional;
 public interface UserRepository
     extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
 
-  Optional<UserEntity> findByPassChangeToken(String passChangeToken);
-
   Optional<UserEntity> findByPersonalCode(String personalCode);
 
   Optional<UserEntity> findByEmail(String email);
 
   Boolean existsByPersonalCode(String personalCode);
-
-  Boolean existsByPassChangeToken(String passChangeToken);
 }

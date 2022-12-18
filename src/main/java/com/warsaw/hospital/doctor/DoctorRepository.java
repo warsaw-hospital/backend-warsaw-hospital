@@ -13,4 +13,6 @@ public interface DoctorRepository
   boolean existsByPersonalCode(String personalCode);
 
   Optional<DoctorEntity> findByPersonalCode(String personalCode);
+
+  Optional<DoctorEntity> findByUserId(Long userId);
 }

@@ -56,7 +56,6 @@ VALUES (1, 'CARDIOLOGIST', 'Cardiologist description'),
 INSERT INTO doctor_to_specialization(id, doctor_id, specialization_id)
 VALUES (1, 1, 12);
 
-
 INSERT INTO work_schedule_template(id, day_of_week, start_hour, end_hour, is_day_off, doctor_id)
 VALUES (1, 1, '9:00', '17:00', false, 1),
        (2, 2, '9:00', '17:00', false, 1),

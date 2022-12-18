@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class LocalWebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests().antMatchers("/**").permitAll();
+    http.cors().and().csrf().disable().authorizeRequests().antMatchers("/**").permitAll();
     return http.build();
   }
 

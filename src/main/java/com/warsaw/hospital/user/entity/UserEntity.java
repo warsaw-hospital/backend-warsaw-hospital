@@ -15,7 +15,6 @@ public class UserEntity {
   private String name;
   private String lastname;
 
-  @Column(unique = true)
   private String email;
 
   private String password;
@@ -28,12 +27,6 @@ public class UserEntity {
 
   private LocalDateTime createdAt;
   private LocalDateTime lastLogin;
-
-  @Column(unique = true)
-  private String passChangeToken;
-
-  @Column(name = "pass_change_token_creation_date")
-  private LocalDateTime tokenCreationDate;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
   private List<UserToUserRoleEntity> roles = new ArrayList<>();
@@ -131,15 +124,6 @@ public class UserEntity {
     return this;
   }
 
-  public String getPassChangeToken() {
-    return passChangeToken;
-  }
-
-  public UserEntity setPassChangeToken(String passChangeToken) {
-    this.passChangeToken = passChangeToken;
-    return this;
-  }
-
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -169,15 +153,6 @@ public class UserEntity {
     }
   }
 
-  public LocalDateTime getTokenCreationDate() {
-    return tokenCreationDate;
-  }
-
-  public UserEntity setTokenCreationDate(LocalDateTime tokenCreationDate) {
-    this.tokenCreationDate = tokenCreationDate;
-    return this;
-  }
-
   public UserToDoctorEntity getDoctor() {
     return doctor;
   }
@@ -202,8 +177,6 @@ public class UserEntity {
         && Objects.equals(getAddress(), that.getAddress())
         && Objects.equals(getCreatedAt(), that.getCreatedAt())
         && Objects.equals(getLastLogin(), that.getLastLogin())
-        && Objects.equals(getPassChangeToken(), that.getPassChangeToken())
-        && Objects.equals(getTokenCreationDate(), that.getTokenCreationDate())
         && Objects.equals(getRoles(), that.getRoles())
         && Objects.equals(getDoctor(), that.getDoctor());
   }
@@ -220,7 +193,6 @@ public class UserEntity {
         getPhoneNumber(),
         getAddress(),
         getCreatedAt(),
-        getTokenCreationDate(),
         getLastLogin(),
         getDoctor());
   }
