@@ -19,8 +19,8 @@ public class DoctorUserController {
     this.service = service;
   }
 
-  @Operation(summary = "Get all doctors filtered by.")
   @GetMapping("/filter")
+  @Operation(summary = "Get all doctors filtered by.")
   public List<DoctorResponse> findAllFilteredBy(
       @RequestParam(required = false) String search,
       @RequestParam(required = false) DoctorSpecializationEnum specialization) {

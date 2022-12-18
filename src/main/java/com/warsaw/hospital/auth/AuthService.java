@@ -3,20 +3,15 @@ package com.warsaw.hospital.auth;
 import com.warsaw.hospital.auth.config.AuthenticatedProfile;
 import com.warsaw.hospital.auth.utils.CookieUtil;
 import com.warsaw.hospital.auth.utils.JwtUtil;
-import com.warsaw.hospital.auth.utils.PasswordUtil;
 import com.warsaw.hospital.auth.web.request.LoginRequest;
-import com.warsaw.hospital.auth.web.request.RegisterRequest;
 import com.warsaw.hospital.auth.web.response.StatusResponse;
-import com.warsaw.hospital.email.EmailService;
-import com.warsaw.hospital.emailtemplate.EmailTemplateService;
-import com.warsaw.hospital.emailtemplate.entity.EmailTemplateEntity;
-import com.warsaw.hospital.exception.ApiException;
+import com.warsaw.hospital.doctor.DoctorService;
 import com.warsaw.hospital.user.UserService;
 import com.warsaw.hospital.user.entity.UserEntity;
+import com.warsaw.hospital.user.entity.UserToDoctorEntity;
 import com.warsaw.hospital.user.entity.UserToUserRoleEntity;
 import com.warsaw.hospital.userrole.UserRoleService;
 import com.warsaw.hospital.userrole.entity.UserRoleEntity;
-import com.warsaw.hospital.utils.LocalDateTimeUtil;
 import io.micrometer.core.lang.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +24,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,12 +33,12 @@ import java.util.stream.Collectors;
 public class AuthService {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
-  private static final String EMAIL_TEMPLATE_NAME = "PASSWORD_REMINDER";
-  private static final String PASS_CHANGE_COMPLETE_EMAIL_TEMPLATE_NAME =
-      "PASSWORD_REMINDER_COMPLETE";
-  private static final String PASS_CHANGE_TOKEN_KEY = "PASS_CHANGE_TOKEN";
-  private static final String EMAIL_USER_EMAIL_KEY = "EMAIL";
-
+  private final UserService userService;
+  private final DoctorService doctorService;
+  private final PasswordEncoder encoder;
+  private final JwtUtil jwtUtil;
+  private final CookieUtil cookieUtil;
+  private final UserRoleService userRoleService;
   // Public for testing
   @Value("${app.generated-password-length}")
   public Integer PASSWORD_LENGTH;
@@ -50,31 +46,18 @@ public class AuthService {
   @Value("${app.BASE_URL}")
   private String BASE_URL;
 
-  private final UserService userService;
-  private final EmailTemplateService emailTemplateService;
-  private final PasswordEncoder encoder;
-  private final PasswordUtil passwordUtil;
-  private final JwtUtil jwtUtil;
-  private final CookieUtil cookieUtil;
-  private final EmailService emailService;
-  private final UserRoleService userRoleService;
-
   public AuthService(
       UserService userService,
-      EmailTemplateService emailTemplateService,
+      DoctorService doctorService,
       PasswordEncoder encoder,
-      PasswordUtil passwordUtil,
       JwtUtil jwtUtil,
       CookieUtil cookieUtil,
-      EmailService emailService,
       UserRoleService userRoleService) {
     this.userService = userService;
-    this.emailTemplateService = emailTemplateService;
     this.encoder = encoder;
-    this.passwordUtil = passwordUtil;
+    this.doctorService = doctorService;
     this.jwtUtil = jwtUtil;
     this.cookieUtil = cookieUtil;
-    this.emailService = emailService;
     this.userRoleService = userRoleService;
   }
 
@@ -100,15 +83,43 @@ public class AuthService {
     return true;
   }
 
-  public Boolean register(RegisterRequest request, HttpServletResponse response) {
-    UserEntity user =
-        new UserEntity()
-            .setName(request.getName())
-            .setLastname(request.getLastname())
-            .setEmail(request.getEmail());
-
+  public Boolean register(UserEntity user, HttpServletResponse response) {
+    user.setLastLogin(LocalDateTime.now())
+        .setPassword(encoder.encode(user.getPassword()))
+        .setCreatedAt(LocalDateTime.now());
+    UserToUserRoleEntity toUserRole =
+        new UserToUserRoleEntity().setUserRole(userRoleService.findById(1L));
+    user.addToUserRole(toUserRole);
+     addAuthorityCookie(user, response);
     userService.create(user);
-    addAuthorityCookie(user, response);
+
+    return true;
+  }
+
+  public Boolean doctorLogin(LoginRequest request, HttpServletResponse response) {
+    String email = request.getEmail();
+    String rawPassword = request.getPassword();
+
+    Optional<UserEntity> maybeUser = userService.maybeFindByEmail(email);
+
+    if (maybeUser.isEmpty() || !encoder.matches(rawPassword, maybeUser.get().getPassword())) {
+      return false;
+    }
+
+    //    Optional<DoctorEntity> maybeDoctor =
+    // doctorService.maybeFindByUserId(maybeUser.get().getId());
+    //    if (maybeDoctor.isEmpty()) {
+    //      return false;
+    //    }
+
+    UserToDoctorEntity userToDoctor = maybeUser.get().getDoctor();
+    if (userToDoctor == null) {
+      return false;
+    }
+
+    UserEntity user = maybeUser.get();
+    userService.update(user.setLastLogin(LocalDateTime.now()));
+    addAuthorityCookie(maybeUser.get(), response);
     return true;
   }
 
@@ -137,6 +148,7 @@ public class AuthService {
     List<GrantedAuthority> authorities =
         AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
     String token = jwtUtil.generateJwtToken(user.getId(), null, null, authorities);
+    System.out.println("token" + token);
     cookieUtil.addAuthorizationCookie(token, response);
   }
 
@@ -153,101 +165,14 @@ public class AuthService {
         .collect(Collectors.joining(","));
   }
 
-  /**
-   * This method send a password reminder letter to user. Also, it is implied that user email is
-   * unique. An exception is thrown, when user does not exist.
-   *
-   * @param email email, which might have a user.
-   */
-  public void remindPassword(String email) {
-    Optional<UserEntity> maybeUser = userService.maybeFindByEmail(email);
-    if (maybeUser.isPresent()) {
-      UserEntity user = maybeUser.get();
-      EmailTemplateEntity emailTemplate = emailTemplateService.findByName(EMAIL_TEMPLATE_NAME);
-      Map<String, String> data = getDataMapForPasswordReminding(user);
-
-      String passChangeToken = data.get(PASS_CHANGE_TOKEN_KEY);
-      userService.update(
-          user.setPassChangeToken(passChangeToken).setTokenCreationDate(LocalDateTime.now()));
-      emailService.send(emailTemplate, email, data);
-    } else {
-      LOGGER.warn("remind password: email[{}] do not exist in database", email);
-    }
-  }
-
-  /**
-   * This method creates a map with values to put into user password reminder email.
-   *
-   * @param user user whose password is forgotten.
-   * @return map of values for user password reminding email.
-   */
-  public Map<String, String> getDataMapForPasswordReminding(UserEntity user) {
-    Map<String, String> result = new HashMap<>();
-
-    UUID uuid = UUID.randomUUID();
-    result.put(EMAIL_USER_EMAIL_KEY, user.getEmail());
-    result.put(PASS_CHANGE_TOKEN_KEY, uuid.toString());
-    result.put("BASE_URL", BASE_URL);
-    return result;
-  }
-
-  /**
-   * This method changes user password by using password change token.
-   *
-   * @param newPassword the new password.
-   * @param passChangeToken a one-time use token for changing user password.
-   */
-  public void changePassword(String newPassword, String passChangeToken) {
-    UserEntity user = userService.findByPassChangeToken(passChangeToken);
-    var tokenCreation = user.getTokenCreationDate();
-
-    if (LocalDateTimeUtil.getHourCountFromDateToNow(tokenCreation) > 24) {
-      // If pass change token is expired, then do not change password
-      throw ApiException.bad("Nepavyko pakeisti slaptažodžio");
-    }
-
-    String encryptedPassword = encoder.encode(newPassword);
-    user.setPassword(encryptedPassword).setPassChangeToken(null);
-    userService.update(user);
-
-    EmailTemplateEntity emailTemplate =
-        emailTemplateService.findByName(PASS_CHANGE_COMPLETE_EMAIL_TEMPLATE_NAME);
-    Map<String, String> data = new HashMap<>();
-    data.put(EMAIL_USER_EMAIL_KEY, user.getEmail());
-    emailService.send(emailTemplate, user.getEmail(), data);
-  }
-
-  /**
-   * This method checks if the user exists by password change token.
-   *
-   * @param passChangeToken one-time use password change token.
-   * @return true or false.
-   */
-  public Boolean isValid(String passChangeToken) {
-    if (!userService.existsByPasswordChangeToken(passChangeToken)) {
-      return false;
-    }
-
-    UserEntity user = userService.findByPassChangeToken(passChangeToken);
-    var tokenCreation = user.getTokenCreationDate();
-    return LocalDateTimeUtil.getHourCountFromDateToNow(tokenCreation) <= 24;
-  }
-
   public StatusResponse getStatus(@Nullable AuthenticatedProfile profile) {
     StatusResponse result = new StatusResponse();
     if (profile == null) {
-      return result.setLoggedIn(false);
+      return result.setIsLoggedIn(false);
     }
     UserEntity user = userService.findById(profile.getUserId());
     boolean isAdmin =
         user.getRoles().stream().anyMatch(role -> role.getUserRole().getName().equals("ADMIN"));
-    return result.setLoggedIn(true).setAdmin(isAdmin);
-  }
-
-  public void sendWelcomeEmail(UserEntity user) {
-    String templateName = AuthEmailUtil.getEmailTemplateName();
-    EmailTemplateEntity template = emailTemplateService.findByName(templateName);
-    Map<String, String> data = AuthEmailUtil.getDataForEmail(user);
-    emailService.send(template, user.getEmail(), data);
+    return result.setIsLoggedIn(true).setIsDoctor(isAdmin);
   }
 }

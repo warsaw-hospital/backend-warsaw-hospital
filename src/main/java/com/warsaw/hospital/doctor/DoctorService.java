@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -44,6 +45,10 @@ public class DoctorService {
             () ->
                 ApiException.notFound(ERROR_MESSAGE_BASE + "notFound")
                     .addLabel("personalCode", personalCode));
+  }
+
+  public Optional<DoctorEntity> maybeFindByUserId(Long userId) {
+    return repository.findByUserId(userId);
   }
 
   public List<DoctorEntity> findAllFilteredBy(

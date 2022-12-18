@@ -15,7 +15,6 @@ public class UserEntity {
   private String name;
   private String lastname;
 
-  @Column(unique = true)
   private String email;
 
   private String password;
@@ -28,12 +27,6 @@ public class UserEntity {
 
   private LocalDateTime createdAt;
   private LocalDateTime lastLogin;
-
-  @Column(unique = true)
-  private String passChangeToken;
-
-  @Column(name = "pass_change_token_creation_date")
-  private LocalDateTime tokenCreationDate;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
   private List<UserToUserRoleEntity> roles = new ArrayList<>();
@@ -131,15 +124,6 @@ public class UserEntity {
     return this;
   }
 
-  public String getPassChangeToken() {
-    return passChangeToken;
-  }
-
-  public UserEntity setPassChangeToken(String passChangeToken) {
-    this.passChangeToken = passChangeToken;
-    return this;
-  }
-
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
@@ -169,15 +153,6 @@ public class UserEntity {
     }
   }
 
-  public LocalDateTime getTokenCreationDate() {
-    return tokenCreationDate;
-  }
-
-  public UserEntity setTokenCreationDate(LocalDateTime tokenCreationDate) {
-    this.tokenCreationDate = tokenCreationDate;
-    return this;
-  }
-
   public UserToDoctorEntity getDoctor() {
     return doctor;
   }
@@ -190,18 +165,20 @@ public class UserEntity {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof UserEntity that)) return false;
-    return getId().equals(that.getId())
-        && getName().equals(that.getName())
-        && getLastname().equals(that.getLastname())
-        && getEmail().equals(that.getEmail())
-        && getPassword().equals(that.getPassword())
-        && getPersonalCode().equals(that.getPersonalCode())
-        && getPhoneNumber().equals(that.getPhoneNumber())
-        && getAddress().equals(that.getAddress())
-        && getCreatedAt().equals(that.getCreatedAt())
-        && getTokenCreationDate() == that.getTokenCreationDate()
-        && Objects.equals(getLastLogin(), that.getLastLogin());
+    if (o == null || getClass() != o.getClass()) return false;
+    UserEntity that = (UserEntity) o;
+    return Objects.equals(getId(), that.getId())
+        && Objects.equals(getName(), that.getName())
+        && Objects.equals(getLastname(), that.getLastname())
+        && Objects.equals(getEmail(), that.getEmail())
+        && Objects.equals(getPassword(), that.getPassword())
+        && Objects.equals(getPersonalCode(), that.getPersonalCode())
+        && Objects.equals(getPhoneNumber(), that.getPhoneNumber())
+        && Objects.equals(getAddress(), that.getAddress())
+        && Objects.equals(getCreatedAt(), that.getCreatedAt())
+        && Objects.equals(getLastLogin(), that.getLastLogin())
+        && Objects.equals(getRoles(), that.getRoles())
+        && Objects.equals(getDoctor(), that.getDoctor());
   }
 
   @Override
@@ -216,7 +193,6 @@ public class UserEntity {
         getPhoneNumber(),
         getAddress(),
         getCreatedAt(),
-        getTokenCreationDate(),
         getLastLogin(),
         getDoctor());
   }

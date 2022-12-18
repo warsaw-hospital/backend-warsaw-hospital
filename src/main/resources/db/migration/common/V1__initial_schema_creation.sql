@@ -1,17 +1,15 @@
 CREATE TABLE IF NOT EXISTS account
 (
-    id                              SERIAL PRIMARY KEY,
-    name                            TEXT NOT NULL,
-    lastname                        TEXT NOT NULL,
-    email                           TEXT NOT NULL UNIQUE,
-    password                        TEXT,
-    personal_code                   TEXT NOT NULL,
-    phone_number                    TEXT NOT NULL,
-    address                         TEXT NOT NULL,
-    created_at                      TIMESTAMP DEFAULT NOW(),
-    last_login                      TIMESTAMP DEFAULT NOW(),
-    pass_change_token               TEXT UNIQUE,
-    pass_change_token_creation_date TIMESTAMP
+    id            SERIAL PRIMARY KEY,
+    name          TEXT NOT NULL,
+    lastname      TEXT NOT NULL,
+    email         TEXT NOT NULL,
+    password      TEXT,
+    personal_code TEXT NOT NULL UNIQUE,
+    phone_number  TEXT NOT NULL,
+    address       TEXT,
+    created_at    TIMESTAMP DEFAULT NOW(),
+    last_login    TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS user_role

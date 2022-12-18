@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "specialization")
+@Entity(name = "doctor_specialization")
 public class DoctorSpecializationEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

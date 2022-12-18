@@ -3,24 +3,24 @@ package com.warsaw.hospital.auth.web.response;
 import java.util.Objects;
 
 public class StatusResponse {
-  private Boolean loggedIn;
-  private Boolean admin;
+  private Boolean isLoggedIn;
+  private Boolean isDoctor;
 
-  public Boolean getLoggedIn() {
-    return loggedIn;
+  public Boolean getIsLoggedIn() {
+    return isLoggedIn;
   }
 
-  public StatusResponse setLoggedIn(Boolean loggedIn) {
-    this.loggedIn = loggedIn;
+  public StatusResponse setIsLoggedIn(Boolean isLoggedIn) {
+    this.isLoggedIn = isLoggedIn;
     return this;
   }
 
-  public Boolean getAdmin() {
-    return admin;
+  public Boolean getIsDoctor() {
+    return isDoctor;
   }
 
-  public StatusResponse setAdmin(Boolean admin) {
-    this.admin = admin;
+  public StatusResponse setIsDoctor(Boolean isDoctor) {
+    this.isDoctor = isDoctor;
     return this;
   }
 
@@ -29,12 +29,12 @@ public class StatusResponse {
     if (this == o) return true;
     if (!(o instanceof StatusResponse)) return false;
     StatusResponse that = (StatusResponse) o;
-    return Objects.equals(getLoggedIn(), that.getLoggedIn())
-        && Objects.equals(getAdmin(), that.getAdmin());
+    return Objects.equals(getIsLoggedIn(), that.getIsLoggedIn())
+        && Objects.equals(getIsDoctor(), that.getIsDoctor());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getLoggedIn(), getAdmin());
+    return Objects.hash(getIsLoggedIn(), getIsDoctor());
   }
 }
