@@ -12,7 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @Profile("!testing")
 @EnableAsync
 @EnableScheduling
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class AsyncConfig implements AsyncConfigurer {
     @Value("${app.thread-count}")
     private int THREADS_COUNT = 20;

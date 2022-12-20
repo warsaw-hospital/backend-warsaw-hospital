@@ -1,10 +1,10 @@
 spring:
   jpa:
     hibernate.ddl-auto: none
-#    properties:
-#      hibernate:
-#        temp:
-#          use_jdbc_metadata_defaults: true
+  #    properties:
+  #      hibernate:
+  #        temp:
+  #          use_jdbc_metadata_defaults: true
   datasource:
     #    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:warsaw-hospital-backend}
     #    username: ${DB_USER:postgres}
@@ -18,7 +18,6 @@ spring:
     baselineOnMigrate: true
     locations: "classpath:db/migration/common, classpath:db/migration/data"
 app:
-  BASE_URL: http://localhost:3000
   jwt:
     secret: ${JWT_SECRET:Am@z11nGS3eEcR4tBBDcbb}
     expirationMs: 172800000 # 2 days

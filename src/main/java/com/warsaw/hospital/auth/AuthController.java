@@ -29,8 +29,7 @@ public class AuthController {
 
   @PostMapping("/register")
   public Boolean register(@RequestBody RegisterRequest request, HttpServletResponse httpResponse) {
-    UserEntity user = AuthMapper.toEntity(request);
-    return service.register(user, httpResponse);
+    return service.register(request, httpResponse);
   }
 
   @Operation(summary = "Login by passing username and password request")

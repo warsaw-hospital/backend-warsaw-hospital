@@ -49,7 +49,6 @@ public class CookieUtil {
   /**
    * This method adds given name and value cookie to the response.
    *
-   * @param name cookie name.
    * @param value cookie value.
    * @param response response, which will contain the cookie.
    */

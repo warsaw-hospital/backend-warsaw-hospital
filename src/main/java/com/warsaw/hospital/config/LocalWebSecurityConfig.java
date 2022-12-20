@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Profile("testing")
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class LocalWebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -25,9 +25,10 @@ public class LocalWebSecurityConfig {
       public void addCorsMappings(@NotNull CorsRegistry registry) {
         registry
             .addMapping("/**")
-            .allowedOrigins("*")
+            .allowedOrigins("http://localhost:3000")
             .allowedMethods("*")
             .allowedHeaders("*")
+            .allowCredentials(true)
             .exposedHeaders("*");
       }
     };

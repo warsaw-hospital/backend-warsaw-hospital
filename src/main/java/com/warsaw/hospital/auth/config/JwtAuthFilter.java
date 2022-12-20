@@ -2,7 +2,6 @@ package com.warsaw.hospital.auth.config;
 
 import com.warsaw.hospital.auth.utils.JwtUtil;
 import com.warsaw.hospital.exception.ApiException;
-import com.warsaw.hospital.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -19,11 +18,9 @@ public class JwtAuthFilter implements Filter {
   private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthFilter.class);
 
   private final JwtUtil jwtUtil;
-  private final UserService userService;
 
-  public JwtAuthFilter(JwtUtil jwtUtil, UserService userService) {
+  public JwtAuthFilter(JwtUtil jwtUtil) {
     this.jwtUtil = jwtUtil;
-    this.userService = userService;
   }
 
   @Override

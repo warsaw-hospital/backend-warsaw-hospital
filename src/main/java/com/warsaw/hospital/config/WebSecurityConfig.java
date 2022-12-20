@@ -17,7 +17,7 @@ import static com.warsaw.hospital.auth.utils.JwtUtil.ADMIN;
 import static com.warsaw.hospital.auth.utils.JwtUtil.USER;
 
 @Profile("!testing")
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class WebSecurityConfig {
   public static final String[] AUTH_WHITELIST = {
     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api/v1/auth/**",
@@ -39,9 +39,10 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable()
-        .cors()
+    http.sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+        .and()
+        .csrf()
         .disable()
         .exceptionHandling()
         .authenticationEntryPoint(unauthorizedHandler)
@@ -50,7 +51,7 @@ public class WebSecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
-        .antMatchers("*", "**", "/**")
+        .antMatchers(AUTH_WHITELIST)
         .permitAll()
         .antMatchers(ADMIN_URL_LIST)
         .hasAnyAuthority(ADMIN)
@@ -69,10 +70,10 @@ public class WebSecurityConfig {
       public void addCorsMappings(@NotNull CorsRegistry registry) {
         registry
             .addMapping("/**")
-            .allowedOrigins("*")
+            .allowedOrigins("http://localhost:3000")
             .allowedMethods("*")
             .allowedHeaders("*")
-            .allowedHeaders("*")
+            .allowCredentials(true)
             .exposedHeaders("*");
       }
     };
